@@ -1,13 +1,14 @@
 [package]
-name = "parachain-template-node"
+name = "hashed-parachain"
 version = "0.1.0"
-authors = ["Anonymous"]
-description = "A new Cumulus FRAME-based Substrate Node, ready for hacking together a parachain."
-license = "Unlicense"
-homepage = "https://substrate.io"
-repository = "https://github.com/paritytech/cumulus/"
+authors = ["Hashed <https://github.com/hashed-io>"]
+description = "Cumulus FRAME-based Substrate Node for the Hashed Network"
+license = "MIT"
+homepage = "https://hashed.io"
+repository = "https://github.com/hashed-io/hashed-substrate"
 edition = "2021"
 build = "build.rs"
+
 
 [dependencies]
 clap = { version = "4.1.8", features = ["derive"] }
@@ -15,9 +16,10 @@ log = "0.4.17"
 codec = { package = "parity-scale-codec", version = "3.0.0" }
 serde = { version = "1.0.152", features = ["derive"] }
 jsonrpsee = { version = "0.16.2", features = ["server"] }
+hex-literal = "0.3.4"
 
 # Local
-parachain-template-runtime = { path = "../runtime" }
+hashed-parachain-runtime = { path = "../runtime" }
 
 # Substrate
 frame-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.40" }
@@ -72,10 +74,10 @@ substrate-build-script-utils = { git = "https://github.com/paritytech/substrate"
 default = []
 runtime-benchmarks = [
 	"try-runtime-cli/try-runtime",
-	"parachain-template-runtime/runtime-benchmarks",
+	"hashed-parachain-runtime/runtime-benchmarks",
 	"polkadot-cli/runtime-benchmarks",
 ]
 try-runtime = [
 	"try-runtime-cli/try-runtime",
-	"parachain-template-runtime/try-runtime"
+	"hashed-parachain-runtime/try-runtime"
 ]
