@@ -51,7 +51,7 @@ spec:
             name: md5-collator-2
             port:
               number: 9933
-  - host: c2.md5.p2p.hashed.network
+  - host: c2.md5.p2p.hashed.live
     http:
       paths:
       - pathType: Prefix

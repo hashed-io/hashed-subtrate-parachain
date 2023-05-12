@@ -51,7 +51,7 @@ spec:
             name: hashed-collator-3
             port:
               number: 9933
-  - host: c3.p2p.hashed.network
+  - host: c3.p2p.hashed.live
     http:
       paths:
       - pathType: Prefix
