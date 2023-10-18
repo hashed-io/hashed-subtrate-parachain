@@ -906,6 +906,31 @@ impl frame_system::offchain::SigningTypes for Runtime {
 }
 
 parameter_types! {
+  pub const MaxScopesPerPallet: u32 = 1000;
+  pub const MaxRolesPerPallet: u32 = 50;
+  pub const RoleMaxLen: u32 = 50;
+  pub const PermissionMaxLen: u32 = 50;
+  pub const MaxPermissionsPerRole: u32 = 100;
+  pub const MaxRolesPerUser: u32 = 10;
+  pub const MaxUsersPerRole: u32 = 2500;
+}
+
+impl pallet_rbac::Config for Runtime {
+  type RuntimeEvent = RuntimeEvent;
+  type RemoveOrigin = EitherOfDiverse<
+    EnsureRoot<AccountId>,
+    pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+  >;
+  type MaxScopesPerPallet = MaxScopesPerPallet;
+  type MaxRolesPerPallet = MaxRolesPerPallet;
+  type RoleMaxLen = RoleMaxLen;
+  type PermissionMaxLen = PermissionMaxLen;
+  type MaxPermissionsPerRole = MaxPermissionsPerRole;
+  type MaxRolesPerUser = MaxRolesPerUser;
+  type MaxUsersPerRole = MaxUsersPerRole;
+}
+
+parameter_types! {
 	pub const XPubLen: u32 = XPUB_LEN;
 	pub const PSBTMaxLen: u32  = 2048;
 	pub const MaxVaultsPerUser: u32 = 10;
@@ -926,6 +951,143 @@ impl pallet_bitcoin_vaults::Config for Runtime {
 	type VaultDescriptionMaxLen = VaultDescriptionMaxLen;
 	type OutputDescriptorMaxLen = OutputDescriptorMaxLen;
 	type MaxProposalsPerVault = MaxProposalsPerVault;
+}
+
+parameter_types! {
+	pub const MaxOwnedDocs: u32 = 100;
+	pub const MaxSharedFromDocs: u32 = 100;
+	pub const MaxSharedToDocs: u32 = 100;
+	pub const DocNameMinLen: u32 = 3;
+	pub const DocNameMaxLen: u32 = 50;
+	pub const DocDescMinLen: u32 = 5;
+	pub const DocDescMaxLen: u32 = 100;
+	pub const GroupNameMinLen: u32 = 3;
+	pub const GroupNameMaxLen: u32 = 50;
+	pub const MaxMemberGroups: u32 = 100;
+}
+
+impl pallet_confidential_docs::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RemoveOrigin = EitherOfDiverse<
+		EnsureRoot<AccountId>,
+		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+	>;
+	type MaxOwnedDocs = MaxOwnedDocs;
+	type MaxSharedFromDocs = MaxSharedFromDocs;
+	type MaxSharedToDocs = MaxSharedToDocs;
+	type DocNameMinLen = DocNameMinLen;
+	type DocNameMaxLen = DocNameMaxLen;
+	type DocDescMinLen = DocDescMinLen;
+	type DocDescMaxLen = DocDescMaxLen;
+	type GroupNameMinLen = GroupNameMinLen;
+	type GroupNameMaxLen = GroupNameMaxLen;
+	type MaxMemberGroups = MaxMemberGroups;
+}
+
+parameter_types! {
+  pub const MaxReserves: u32 = 200;
+}
+
+impl pallet_mapped_assets::Config for Runtime {
+  type RuntimeEvent = RuntimeEvent;
+  type Balance = u128;
+  type AssetId = u32;
+  type Currency = Balances;
+  type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+  type ForceOrigin = EnsureRoot<AccountId>;
+  type AssetDeposit = AssetDeposit;
+  type AssetAccountDeposit = ConstU128<DOLLARS>;
+  type MetadataDepositBase = MetadataDepositBase;
+  type MetadataDepositPerByte = MetadataDepositPerByte;
+  type ApprovalDeposit = ApprovalDeposit;
+  type StringLimit = StringLimit;
+  type Freezer = ();
+  type Extra = ();
+  type WeightInfo = ();
+  type MaxReserves = MaxReserves;
+  type ReserveIdentifier = u32;
+  type RemoveItemsLimit = RemoveItemsLimit;
+  type AssetIdParameter = u32;
+  type CallbackHandle = DefaultCallback;
+  type Rbac = RBAC;
+}
+
+impl pallet_fruniques::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RemoveOrigin = EitherOfDiverse<
+		EnsureRoot<AccountId>,
+		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+	>;
+	type Rbac = RBAC;
+	type ChildMaxLen = ChildMaxLen;
+	type MaxParentsInCollection = MaxParentsInCollection;
+	// type PalletId = FruniquesPalletId;
+}
+
+parameter_types! {
+  pub const LabelMaxLen: u32 = 32;
+  pub const MaxAuthsPerMarket: u32 = 30;
+  pub const MaxRolesPerAuth : u32 = 1;
+  pub const MaxApplicants: u32 = 3;
+  pub const MaxBlockedUsersPerMarket: u32 = 100;
+  pub const NotesMaxLen: u32 = 256;
+  pub const MaxFeedbackLen: u32 = 256;
+  pub const NameMaxLen: u32 = 100;
+  pub const MaxFiles: u32 = 10;
+  pub const MaxApplicationsPerCustodian: u32 = 2;
+  pub const MaxMarketsPerItem: u32 = 10;
+  pub const MaxOffersPerMarket: u32 = 100;
+}
+impl pallet_gated_marketplace::Config for Runtime {
+  type RuntimeEvent = RuntimeEvent;
+  type MaxAuthsPerMarket = MaxAuthsPerMarket;
+  type MaxRolesPerAuth = MaxRolesPerAuth;
+  type MaxApplicants = MaxApplicants;
+  type MaxBlockedUsersPerMarket = MaxBlockedUsersPerMarket;
+  type LabelMaxLen = LabelMaxLen;
+  type NotesMaxLen = NotesMaxLen;
+  type MaxFeedbackLen = MaxFeedbackLen;
+  type NameMaxLen = NameMaxLen;
+  type MaxFiles = MaxFiles;
+  type MaxApplicationsPerCustodian = MaxApplicationsPerCustodian;
+  type MaxOffersPerMarket = MaxOffersPerMarket;
+  type MaxMarketsPerItem = MaxMarketsPerItem;
+  type Timestamp = Timestamp;
+  type Moment = u64;
+  //type LocalCurrency = Balances;
+  type Rbac = RBAC;
+}
+
+impl pallet_afloat::Config for Runtime {
+  type RuntimeEvent = RuntimeEvent;
+  type Currency = Balances;
+  type TimeProvider = Timestamp;
+  //type RemoveOrigin = EnsureRoot<AccountId>;
+  type Rbac = RBAC;
+  type ItemId = u32;
+}
+
+parameter_types! {
+  pub const MaxRecordsAtTime:u32 = 50;
+}
+
+impl pallet_fund_admin_records::Config for Runtime {
+  type RuntimeEvent = RuntimeEvent;
+  type RemoveOrigin = EitherOfDiverse<
+    EnsureRoot<AccountId>,
+    pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+  >;
+  type Timestamp = Timestamp;
+  type Moment = u64;
+  type MaxRecordsAtTime = MaxRecordsAtTime;
+}
+
+parameter_types! {
+	pub const MaxRecursions: u32 = 10;
+	pub const ResourceSymbolLimit: u32 = 10;
+	pub const PartsLimit: u32 = 3;
+	pub const MaxPriorities: u32 = 3;
+	pub const CollectionSymbolLimit: u32 = 100;
 }
 
 parameter_types! {
@@ -1101,13 +1263,15 @@ construct_runtime!(
 		Whitelist: pallet_whitelist::{Pallet, Call, Storage, Event<T>}  = 101,
 
 		// Custom Pallets
-		BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 151,
-		Uniques: pallet_uniques::{Pallet, Call, Storage, Event<T>}  = 152,
-		Fruniques: pallet_fruniques::{Pallet, Call, Storage, Event<T>}  = 153,
-		GatedMarketplace: pallet_gated_marketplace::{Pallet, Call, Storage, Event<T>}  = 154,
-		RBAC: pallet_rbac::{Pallet, Call, Storage, Event<T>}  = 155,
-		ConfidentialDocs: pallet_confidential_docs::{Pallet, Call, Storage, Event<T>}  = 156,
-
+		Fruniques: pallet_fruniques::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 151,
+		GatedMarketplace: pallet_gated_marketplace::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 152,
+		Assets: pallet_assets::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 153,
+		BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 154,
+		RBAC: pallet_rbac::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 155,
+		ConfidentialDocs: pallet_confidential_docs::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 156,
+		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 157,
+		Afloat: pallet_afloat::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 158,
+		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 159,
 	}
 );
 
