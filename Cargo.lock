@@ -1108,9 +1108,9 @@ checksum = "28c122c3980598d243d63d9a704629a2d748d101f278052ff068be5a4423ab6f"
 
 [[package]]
 name = "const-random"
-version = "0.1.16"
+version = "0.1.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11df32a13d7892ec42d51d3d175faba5211ffe13ed25d4fb348ac9e9ce835593"
+checksum = "5aaf16c9c2c612020bcfd042e170f6e32de9b9d75adb5277cdbbd2e2c8c8299a"
 dependencies = [
  "const-random-macro",
 ]
@@ -2018,9 +2018,9 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek-derive"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83fdaf97f4804dcebfa5862639bc9ce4121e82140bec2a987ac5140294865b5b"
+checksum = "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -5841,7 +5841,7 @@ dependencies = [
 [[package]]
 name = "pallet-afloat"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6079,7 +6079,7 @@ dependencies = [
 [[package]]
 name = "pallet-bitcoin-vaults"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6172,7 +6172,7 @@ dependencies = [
 [[package]]
 name = "pallet-confidential-docs"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6293,7 +6293,7 @@ dependencies = [
 [[package]]
 name = "pallet-fruniques"
 version = "0.1.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6310,7 +6310,7 @@ dependencies = [
 [[package]]
 name = "pallet-fund-admin-records"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6325,7 +6325,7 @@ dependencies = [
 [[package]]
 name = "pallet-gated-marketplace"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6450,7 +6450,7 @@ dependencies = [
 [[package]]
 name = "pallet-mapped-assets"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6691,7 +6691,7 @@ dependencies = [
 [[package]]
 name = "pallet-rbac"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6927,7 +6927,7 @@ dependencies = [
 [[package]]
 name = "pallet-template"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#d19802d7ded01e44ea08325d99d21a045a3fd83a"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=fix-dependencies-polkadotv1#cb143668129a3c321ffd29cfb7c3a95b79a6421b"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -14069,9 +14069,9 @@ checksum = "ed94fce61571a4006852b7389a063ab983c02eb1bb37b47f8272ce92d06d9538"
 
 [[package]]
 name = "winnow"
-version = "0.5.17"
+version = "0.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3b801d0e0a6726477cc207f60162da452f3a95adb368399bef20a946e06f65c"
+checksum = "176b6138793677221d420fd2f0aeeced263f197688b36484660da767bca2fa32"
 dependencies = [
  "memchr",
 ]
