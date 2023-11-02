@@ -31,7 +31,7 @@ use frame_support::{
 	construct_runtime,
 	dispatch::DispatchClass,
 	parameter_types,
-	traits::{ AsEnsureOriginWithArg, ConstU32, ConstU64, ConstU128, ConstU8, EitherOfDiverse, Everything, InstanceFilter, WithdrawReasons,},
+	traits::{ AsEnsureOriginWithArg, ConstBool, ConstU32, ConstU64, ConstU128, ConstU8, EitherOfDiverse, Everything, InstanceFilter, WithdrawReasons,},
 	weights::{
 		constants::WEIGHT_REF_TIME_PER_SECOND, ConstantMultiplier, Weight, WeightToFeeCoefficient,
 		WeightToFeeCoefficients, WeightToFeePolynomial,
@@ -68,6 +68,9 @@ pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::Account
 
 /// Balance of an account.
 pub type Balance = u128;
+
+/// Index of a transaction in the chain.
+pub type Nonce = u32;
 
 pub type AccountIndex = u32;
 
@@ -275,15 +278,13 @@ impl frame_system::Config for Runtime {
 	/// The lookup mechanism to get account ID from whatever is passed in dispatchers.
 	type Lookup = AccountIdLookup<AccountId, ()>;
 	/// The index type for storing how many extrinsics an account has signed.
-	type Index = Index;
-	/// The index type for blocks.
-	type BlockNumber = BlockNumber;
+	type Nonce = Nonce;
 	/// The type for hashing blocks and tries.
 	type Hash = Hash;
 	/// The hashing algorithm used.
 	type Hashing = BlakeTwo256;
-	/// The header type.
-	type Header = generic::Header<BlockNumber, BlakeTwo256>;
+	/// The block type.
+	type Block = Block;
 	/// The ubiquitous event type.
 	type RuntimeEvent = RuntimeEvent;
 	/// The ubiquitous origin type.
@@ -346,6 +347,10 @@ impl pallet_balances::Config for Runtime {
 	type WeightInfo = pallet_balances::weights::SubstrateWeight<Runtime>;
 	type MaxReserves = ConstU32<50>;
 	type ReserveIdentifier = [u8; 8];
+	type RuntimeHoldReason = RuntimeHoldReason;
+	type FreezeIdentifier = ();
+	type MaxHolds = ConstU32<0>;
+	type MaxFreezes = ConstU32<0>;
 }
 
 parameter_types! {
@@ -360,6 +365,12 @@ impl pallet_transaction_payment::Config for Runtime {
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type FeeMultiplierUpdate = SlowAdjustingFeeUpdate<Self>;
 	type OperationalFeeMultiplier = ConstU8<5>;
+}
+
+impl pallet_sudo::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeCall = RuntimeCall;
+	type WeightInfo = ();
 }
 
 parameter_types! {
@@ -424,12 +435,13 @@ impl pallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
 	type DisabledValidators = ();
 	type MaxAuthorities = ConstU32<100_000>;
+	type AllowMultipleBlocksPerSlot = ConstBool<false>;
 }
 
 parameter_types! {
 	pub const PotId: PalletId = PalletId(*b"PotStake");
 	pub const MaxCandidates: u32 = 1000;
-	pub const MinCandidates: u32 = 5;
+	pub const MinEligibleCollators: u32 = 5;
 	pub const SessionLength: BlockNumber = 6 * HOURS;
 	pub const MaxInvulnerables: u32 = 100;
 	pub const ExecutiveBody: BodyId = BodyId::Executive;
@@ -444,7 +456,7 @@ impl pallet_collator_selection::Config for Runtime {
 	type UpdateOrigin = CollatorSelectionUpdateOrigin;
 	type PotId = PotId;
 	type MaxCandidates = MaxCandidates;
-	type MinCandidates = MinCandidates;
+	type MinEligibleCollators = MinEligibleCollators;
 	type MaxInvulnerables = MaxInvulnerables;
 	// should be a multiple of session or things will get inconsistent
 	type KickThreshold = Period;
@@ -545,6 +557,7 @@ impl pallet_assets::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = u128;
 	type AssetId = u32;
+	type AssetIdParameter = u32;
 	type Currency = Balances;
 	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
 	type ForceOrigin = EnsureRoot<AccountId>;
@@ -558,7 +571,6 @@ impl pallet_assets::Config for Runtime {
 	type Extra = ();
 	type WeightInfo = ();
 	type RemoveItemsLimit = RemoveItemsLimit;
-	type AssetIdParameter = u32;
 	type CallbackHandle = ();
 }
 
@@ -567,6 +579,7 @@ parameter_types! {
 	pub CouncilMotionDuration: BlockNumber = 3 * DAYS;
 	pub const CouncilMaxProposals: u32 = 100;
 	pub const CouncilMaxMembers: u32 = 100;
+	// pub MaxCollectivesProposalWeight: Weight = Perbill::from_percent(50) * BlockWeights::get().max_block;
 }
 
 type CouncilCollective = pallet_collective::Instance1;
@@ -580,38 +593,37 @@ impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type DefaultVote = pallet_collective::PrimeDefaultVote;
 	type WeightInfo = ();
 	type SetMembersOrigin = EnsureRoot<AccountId>;
+	type MaxProposalWeight = ();
 }
 
 impl pallet_insecure_randomness_collective_flip::Config for Runtime {}
 
 parameter_types! {
-	pub const CandidateDeposit: Balance = 1000 * CENTS;
-	pub const WrongSideDeduction: Balance = 200 * CENTS;
-	pub const MaxStrikes: u32 = 10;
-	pub const RotationPeriod: BlockNumber = 7 * DAYS;
+	pub const GraceStrikes: u32 = 10;
 	pub const PeriodSpend: Balance = 50000 * CENTS;
 	pub const MaxLockDuration: BlockNumber = 36 * 30 * DAYS;
+	pub const VotingPeriod: BlockNumber = 7 * DAYS;
+	pub const ClaimPeriod: BlockNumber = 7 * DAYS;
 	pub const ChallengePeriod: BlockNumber = 7 * DAYS;
-	pub const MaxCandidateIntake: u32 = 1;
 	pub const SocietyPalletId: PalletId = PalletId(*b"py/socie");
 }
 
 impl pallet_society::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
+	type PalletId = SocietyPalletId;
 	type Currency = Balances;
 	type Randomness = RandomnessCollectiveFlip;
-	type CandidateDeposit = CandidateDeposit;
-	type WrongSideDeduction = WrongSideDeduction;
-	type MaxStrikes = MaxStrikes;
+	type GraceStrikes = GraceStrikes;
 	type PeriodSpend = PeriodSpend;
-	type MembershipChanged = ();
-	type RotationPeriod = RotationPeriod;
+	type VotingPeriod = VotingPeriod;
+	type ClaimPeriod = ClaimPeriod;
 	type MaxLockDuration = MaxLockDuration;
 	type FounderSetOrigin = EnsureRoot<AccountId>;
-	type SuspensionJudgementOrigin = pallet_society::EnsureFounder<Runtime>;
 	type ChallengePeriod = ChallengePeriod;
-	type MaxCandidateIntake = MaxCandidateIntake;
-	type PalletId = SocietyPalletId;
+	type MaxPayouts = ConstU32<5>;
+	type MaxBids = ConstU32<3>;
+	type WeightInfo = ();
+
 }
 
 parameter_types! {
@@ -719,11 +731,6 @@ impl pallet_vesting::Config for Runtime {
 	// `VestingInfo` encode length is 36bytes. 28 schedules gets encoded as 1009 bytes, which is the
 	// highest number of schedules that encodes less than 2^10.
 	const MAX_VESTING_SCHEDULES: u32 = 28;
-}
-
-impl pallet_sudo::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type RuntimeCall = RuntimeCall;
 }
 
 parameter_types! {
@@ -917,10 +924,7 @@ parameter_types! {
 
 impl pallet_rbac::Config for Runtime {
   type RuntimeEvent = RuntimeEvent;
-  type RemoveOrigin = EitherOfDiverse<
-    EnsureRoot<AccountId>,
-    pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
-  >;
+  type RemoveOrigin = RootOrThreeFifthsOfCouncil;
   type MaxScopesPerPallet = MaxScopesPerPallet;
   type MaxRolesPerPallet = MaxRolesPerPallet;
   type RoleMaxLen = RoleMaxLen;
@@ -940,18 +944,18 @@ parameter_types! {
 	pub const MaxProposalsPerVault: u32 = 100;
 }
 
-impl pallet_bitcoin_vaults::Config for Runtime {
-	type AuthorityId = pallet_bitcoin_vaults::types::crypto::TestAuthId;
-	type RuntimeEvent = RuntimeEvent;
-	type ChangeBDKOrigin = RootOrThreeFifthsOfCouncil;
-	type XPubLen = XPubLen;
-	type PSBTMaxLen = PSBTMaxLen;
-	type MaxVaultsPerUser = MaxVaultsPerUser;
-	type MaxCosignersPerVault = MaxCosignersPerVault;
-	type VaultDescriptionMaxLen = VaultDescriptionMaxLen;
-	type OutputDescriptorMaxLen = OutputDescriptorMaxLen;
-	type MaxProposalsPerVault = MaxProposalsPerVault;
-}
+// impl pallet_bitcoin_vaults::Config for Runtime {
+// 	type AuthorityId = pallet_bitcoin_vaults::types::crypto::TestAuthId;
+// 	type RuntimeEvent = RuntimeEvent;
+// 	type ChangeBDKOrigin = RootOrThreeFifthsOfCouncil;
+// 	type XPubLen = XPubLen;
+// 	type PSBTMaxLen = PSBTMaxLen;
+// 	type MaxVaultsPerUser = MaxVaultsPerUser;
+// 	type MaxCosignersPerVault = MaxCosignersPerVault;
+// 	type VaultDescriptionMaxLen = VaultDescriptionMaxLen;
+// 	type OutputDescriptorMaxLen = OutputDescriptorMaxLen;
+// 	type MaxProposalsPerVault = MaxProposalsPerVault;
+// }
 
 parameter_types! {
 	pub const MaxOwnedDocs: u32 = 100;
@@ -968,10 +972,7 @@ parameter_types! {
 
 impl pallet_confidential_docs::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type RemoveOrigin = EitherOfDiverse<
-		EnsureRoot<AccountId>,
-		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
-	>;
+	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
 	type MaxOwnedDocs = MaxOwnedDocs;
 	type MaxSharedFromDocs = MaxSharedFromDocs;
 	type MaxSharedToDocs = MaxSharedToDocs;
@@ -992,6 +993,7 @@ impl pallet_mapped_assets::Config for Runtime {
   type RuntimeEvent = RuntimeEvent;
   type Balance = u128;
   type AssetId = u32;
+  type AssetIdParameter = u32;
   type Currency = Balances;
   type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
   type ForceOrigin = EnsureRoot<AccountId>;
@@ -1004,20 +1006,14 @@ impl pallet_mapped_assets::Config for Runtime {
   type Freezer = ();
   type Extra = ();
   type WeightInfo = ();
-  type MaxReserves = MaxReserves;
-  type ReserveIdentifier = u32;
   type RemoveItemsLimit = RemoveItemsLimit;
-  type AssetIdParameter = u32;
-  type CallbackHandle = DefaultCallback;
+  type CallbackHandle = ();
   type Rbac = RBAC;
 }
 
 impl pallet_fruniques::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type RemoveOrigin = EitherOfDiverse<
-		EnsureRoot<AccountId>,
-		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
-	>;
+	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
 	type Rbac = RBAC;
 	type ChildMaxLen = ChildMaxLen;
 	type MaxParentsInCollection = MaxParentsInCollection;
@@ -1073,10 +1069,7 @@ parameter_types! {
 
 impl pallet_fund_admin_records::Config for Runtime {
   type RuntimeEvent = RuntimeEvent;
-  type RemoveOrigin = EitherOfDiverse<
-    EnsureRoot<AccountId>,
-    pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
-  >;
+  type RemoveOrigin = RootOrThreeFifthsOfCouncil;
   type Timestamp = Timestamp;
   type Moment = u64;
   type MaxRecordsAtTime = MaxRecordsAtTime;
@@ -1118,103 +1111,11 @@ impl pallet_uniques::Config for Runtime {
 	type Locker = ();
 }
 
-impl pallet_fruniques::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
-	type ChildMaxLen = ChildMaxLen;
-	type MaxParentsInCollection = MaxParentsInCollection;
-	type Rbac = RBAC;
-}
 
-parameter_types! {
-	pub const LabelMaxLen:u32 = 32;
-	pub const MaxAuthsPerMarket:u32 = 3; // 1 of each role (1 owner, 1 admin, etc.)
-	pub const MaxRolesPerAuth: u32 = 2;
-	pub const MaxApplicants: u32 = 10;
-	pub const MaxBlockedUsersPerMarket: u32 = 100;
-	pub const NotesMaxLen: u32 = 256;
-	pub const MaxFeedbackLen: u32 = 256;
-	pub const NameMaxLen: u32 = 100;
-	pub const MaxFiles: u32 = 10;
-	pub const MaxApplicationsPerCustodian: u32 = 10;
-	pub const MaxMarketsPerItem: u32 = 10;
-	pub const MaxOffersPerMarket: u32 = 100;
-}
-
-impl pallet_gated_marketplace::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type MaxAuthsPerMarket = MaxAuthsPerMarket;
-	type MaxRolesPerAuth = MaxRolesPerAuth;
-	type MaxApplicants = MaxApplicants;
-	type MaxBlockedUsersPerMarket = MaxBlockedUsersPerMarket;
-	type LabelMaxLen = LabelMaxLen;
-	type NotesMaxLen = NotesMaxLen;
-	type MaxFeedbackLen = MaxFeedbackLen;
-	type NameMaxLen = NameMaxLen;
-	type MaxFiles = MaxFiles;
-	type MaxApplicationsPerCustodian = MaxApplicationsPerCustodian;
-	type MaxMarketsPerItem = MaxMarketsPerItem;
-	type MaxOffersPerMarket = MaxOffersPerMarket;
-	type Timestamp = Timestamp;
-	type Moment = Moment;
-	type Rbac = RBAC;
-}
-
-parameter_types! {
-	pub const MaxScopesPerPallet: u32 = 1000;
-	pub const MaxRolesPerPallet: u32 = 20;
-	pub const RoleMaxLen: u32 = 30;
-	pub const PermissionMaxLen: u32 = 30;
-	pub const MaxPermissionsPerRole: u32 = 12;
-	pub const MaxRolesPerUser: u32 = 10;
-	pub const MaxUsersPerRole: u32 = 10;
-}
-
-impl pallet_rbac::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type MaxScopesPerPallet = MaxScopesPerPallet;
-	type MaxRolesPerPallet = MaxRolesPerPallet;
-	type RoleMaxLen = RoleMaxLen;
-	type PermissionMaxLen = PermissionMaxLen;
-	type MaxPermissionsPerRole = MaxPermissionsPerRole;
-	type MaxRolesPerUser = MaxRolesPerUser;
-	type MaxUsersPerRole = MaxUsersPerRole;
-}
-
-parameter_types! {
-	pub const MaxOwnedDocs: u32 = 100;
-	pub const MaxSharedFromDocs: u32 = 100;
-	pub const MaxSharedToDocs: u32 = 100;
-	pub const DocNameMinLen: u32 = 3;
-	pub const DocNameMaxLen: u32 = 50;
-	pub const DocDescMinLen: u32 = 5;
-	pub const DocDescMaxLen: u32 = 100;
-	pub const GroupNameMinLen: u32 = 3;
-	pub const GroupNameMaxLen: u32 = 50;
-	pub const MaxMemberGroups: u32 = 100;
-}
-
-impl pallet_confidential_docs::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
-	type MaxOwnedDocs = MaxOwnedDocs;
-	type MaxSharedFromDocs = MaxSharedFromDocs;
-	type MaxSharedToDocs = MaxSharedToDocs;
-	type DocNameMinLen = DocNameMinLen;
-	type DocNameMaxLen = DocNameMaxLen;
-	type DocDescMinLen = DocDescMinLen;
-	type DocDescMaxLen = DocDescMaxLen;
-	type GroupNameMinLen = GroupNameMinLen;
-	type GroupNameMaxLen = GroupNameMaxLen;
-	type MaxMemberGroups = MaxMemberGroups;
-}
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
-	pub enum Runtime where
-		Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic,
+	pub enum Runtime
 	{
 		// System support stuff.
 		System: frame_system = 0,
@@ -1241,7 +1142,7 @@ construct_runtime!(
 
 		// Additional pallets
 		Bounties: pallet_bounties::{Pallet, Call, Storage, Event<T>} = 61,
-		Treasury: pallet_treasury::{Pallet, Call, Storage, Config, Event<T>} = 62,
+		Treasury: pallet_treasury::{Pallet, Call, Storage, Config<T>, Event<T>} = 62,
 		ChildBounties: pallet_child_bounties::{Pallet, Call, Storage, Event<T>} = 63,
 		Assets: pallet_assets::{Pallet, Call, Storage, Event<T>} = 64,
 		// AssetTxPayment: pallet_asset_tx_payment::{Pallet, Call, Storage, Event<T>} = 16,
@@ -1263,15 +1164,14 @@ construct_runtime!(
 		Whitelist: pallet_whitelist::{Pallet, Call, Storage, Event<T>}  = 101,
 
 		// Custom Pallets
-		Fruniques: pallet_fruniques::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 151,
-		GatedMarketplace: pallet_gated_marketplace::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 152,
-		Assets: pallet_assets::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 153,
-		BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 154,
-		RBAC: pallet_rbac::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 155,
-		ConfidentialDocs: pallet_confidential_docs::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 156,
-		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 157,
-		Afloat: pallet_afloat::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 158,
-		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 159,
+		Fruniques: pallet_fruniques::{Pallet, Call, Storage, Event<T>}  = 151,
+		GatedMarketplace: pallet_gated_marketplace::{Pallet, Call, Storage, Event<T>}  = 152,
+		// BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 154,
+		RBAC: pallet_rbac::{Pallet, Call, Storage, Event<T>}  = 155,
+		ConfidentialDocs: pallet_confidential_docs::{Pallet, Call, Storage, Event<T>}  = 156,
+		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>}  = 157,
+		Afloat: pallet_afloat::{Pallet, Call, Storage, Event<T>}  = 158,
+		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Event<T>}  = 159,
 	}
 );
 
@@ -1282,6 +1182,7 @@ mod benches {
 		[pallet_balances, Balances]
 		[pallet_session, SessionBench::<Runtime>]
 		[pallet_timestamp, Timestamp]
+		[pallet_sudo, Sudo]
 		[pallet_collator_selection, CollatorSelection]
 		[cumulus_pallet_xcmp_queue, XcmpQueue]
 	);
@@ -1315,6 +1216,13 @@ impl_runtime_apis! {
 	impl sp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			OpaqueMetadata::new(Runtime::metadata().into())
+		}
+		fn metadata_at_version(version: u32) -> Option<OpaqueMetadata> {
+			Runtime::metadata_at_version(version)
+		}
+
+		fn metadata_versions() -> sp_std::vec::Vec<u32> {
+			Runtime::metadata_versions()
 		}
 	}
 
@@ -1367,8 +1275,8 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Index> for Runtime {
-		fn account_nonce(account: AccountId) -> Index {
+	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
+		fn account_nonce(account: AccountId) -> Nonce {
 			System::account_nonce(account)
 		}
 	}
@@ -1457,16 +1365,25 @@ impl_runtime_apis! {
 			list_benchmarks!(list, extra);
 
 			let storage_info = AllPalletsWithSystem::storage_info();
-			return (list, storage_info)
+			(list, storage_info)
 		}
 
 		fn dispatch_benchmark(
 			config: frame_benchmarking::BenchmarkConfig
 		) -> Result<Vec<frame_benchmarking::BenchmarkBatch>, sp_runtime::RuntimeString> {
-			use frame_benchmarking::{Benchmarking, BenchmarkBatch, TrackedStorageKey};
+			use frame_benchmarking::{BenchmarkError, Benchmarking, BenchmarkBatch};
 
 			use frame_system_benchmarking::Pallet as SystemBench;
-			impl frame_system_benchmarking::Config for Runtime {}
+			impl frame_system_benchmarking::Config for Runtime {
+				fn setup_set_code_requirements(code: &sp_std::vec::Vec<u8>) -> Result<(), BenchmarkError> {
+					ParachainSystem::initialize_for_set_code_benchmark(code.len() as u32);
+					Ok(())
+				}
+
+				fn verify_set_code() {
+					System::assert_last_event(cumulus_pallet_parachain_system::Event::<Runtime>::ValidationFunctionStored.into());
+				}
+			}
 
 			use cumulus_pallet_session_benchmarking::Pallet as SessionBench;
 			impl cumulus_pallet_session_benchmarking::Config for Runtime {}
