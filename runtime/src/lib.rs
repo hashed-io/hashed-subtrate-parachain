@@ -778,6 +778,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Balances(..)
 					| RuntimeCall::Assets(..)
 					| RuntimeCall::Uniques(..)
+					| RuntimeCall::Fruniques(..)
 					| RuntimeCall::Vesting(pallet_vesting::Call::vested_transfer { .. })
 					| RuntimeCall::Indices(pallet_indices::Call::transfer { .. })
 			),
@@ -944,18 +945,18 @@ parameter_types! {
 	pub const MaxProposalsPerVault: u32 = 100;
 }
 
-// impl pallet_bitcoin_vaults::Config for Runtime {
-// 	type AuthorityId = pallet_bitcoin_vaults::types::crypto::TestAuthId;
-// 	type RuntimeEvent = RuntimeEvent;
-// 	type ChangeBDKOrigin = RootOrThreeFifthsOfCouncil;
-// 	type XPubLen = XPubLen;
-// 	type PSBTMaxLen = PSBTMaxLen;
-// 	type MaxVaultsPerUser = MaxVaultsPerUser;
-// 	type MaxCosignersPerVault = MaxCosignersPerVault;
-// 	type VaultDescriptionMaxLen = VaultDescriptionMaxLen;
-// 	type OutputDescriptorMaxLen = OutputDescriptorMaxLen;
-// 	type MaxProposalsPerVault = MaxProposalsPerVault;
-// }
+impl pallet_bitcoin_vaults::Config for Runtime {
+	type AuthorityId = pallet_bitcoin_vaults::types::crypto::TestAuthId;
+	type RuntimeEvent = RuntimeEvent;
+	type ChangeBDKOrigin = RootOrThreeFifthsOfCouncil;
+	type XPubLen = XPubLen;
+	type PSBTMaxLen = PSBTMaxLen;
+	type MaxVaultsPerUser = MaxVaultsPerUser;
+	type MaxCosignersPerVault = MaxCosignersPerVault;
+	type VaultDescriptionMaxLen = VaultDescriptionMaxLen;
+	type OutputDescriptorMaxLen = OutputDescriptorMaxLen;
+	type MaxProposalsPerVault = MaxProposalsPerVault;
+}
 
 parameter_types! {
 	pub const MaxOwnedDocs: u32 = 100;
@@ -1145,6 +1146,7 @@ construct_runtime!(
 		Treasury: pallet_treasury::{Pallet, Call, Storage, Config<T>, Event<T>} = 62,
 		ChildBounties: pallet_child_bounties::{Pallet, Call, Storage, Event<T>} = 63,
 		Assets: pallet_assets::{Pallet, Call, Storage, Event<T>} = 64,
+		Uniques: pallet_uniques::{Pallet, Call, Storage, Event<T>}  = 65,
 		// AssetTxPayment: pallet_asset_tx_payment::{Pallet, Call, Storage, Event<T>} = 16,
 
 		// Governance Related
@@ -1166,7 +1168,7 @@ construct_runtime!(
 		// Custom Pallets
 		Fruniques: pallet_fruniques::{Pallet, Call, Storage, Event<T>}  = 151,
 		GatedMarketplace: pallet_gated_marketplace::{Pallet, Call, Storage, Event<T>}  = 152,
-		// BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>, ValidateUnsigned}  = 154,
+		BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>}  = 154,
 		RBAC: pallet_rbac::{Pallet, Call, Storage, Event<T>}  = 155,
 		ConfidentialDocs: pallet_confidential_docs::{Pallet, Call, Storage, Event<T>}  = 156,
 		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>}  = 157,

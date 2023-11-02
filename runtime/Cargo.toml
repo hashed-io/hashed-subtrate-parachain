@@ -25,7 +25,7 @@ smallvec = "1.11.0"
 # Hashed Dependencies
 pallet-template = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 pallet-fruniques = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
-# pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
+pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 # pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features = false }
 pallet-gated-marketplace = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 pallet-rbac = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
@@ -137,7 +137,7 @@ std = [
 	"frame-system-rpc-runtime-api/std",
 	"frame-system/std",
 	# Local Pallets
-	# "pallet-bitcoin-vaults/std",
+	"pallet-bitcoin-vaults/std",
 	"pallet-gated-marketplace/std",
 	"pallet-rbac/std",
 	"pallet-confidential-docs/std",
@@ -246,7 +246,7 @@ try-runtime = [
 	"pallet-xcm/try-runtime",
 	"parachain-info/try-runtime",
 	# Hashed pallets
-	# "pallet-bitcoin-vaults/try-runtime",
+	"pallet-bitcoin-vaults/try-runtime",
 	"pallet-confidential-docs/try-runtime",
 	"pallet-fruniques/try-runtime",
 	"pallet-fund-admin-records/try-runtime",
