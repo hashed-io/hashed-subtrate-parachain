@@ -2,9 +2,7 @@ use sc_service::ChainType;
 use hex_literal::hex;
 use sp_core::crypto::UncheckedInto;
 
-use super::{
-	session_keys, SAFE_XCM_VERSION, Extensions,
-};
+use super::{session_keys, Extensions, SAFE_XCM_VERSION};
 
 use cumulus_primitives_core::ParaId;
 use hashed_parachain_runtime::{AccountId, AuraId, SudoConfig, EXISTENTIAL_DEPOSIT};
@@ -15,15 +13,14 @@ pub type Md5ChainSpec =
 
 /// Gen MD5 chain specification
 pub fn get_chain_spec() -> Md5ChainSpec {
-
-    let mut properties = sc_chain_spec::Properties::new();
+	let mut properties = sc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "MD5".into());
 	properties.insert("tokenDecimals".into(), 18.into());
 	properties.insert("ss58Format".into(), 5000.into());
 	properties.insert("prefix".into(), 5000.into());
 	properties.insert("network".into(), "md5".into());
 	properties.insert("displayName".into(), "MD5 Network".into());
-	properties.insert("standardAccount".into(),"*25519".into());
+	properties.insert("standardAccount".into(), "*25519".into());
 	properties.insert("website".into(), "https://hashed.network".into());
 
 	Md5ChainSpec::from_genesis(
@@ -35,21 +32,23 @@ pub fn get_chain_spec() -> Md5ChainSpec {
 				// initial collators.
 				vec![
 					(
-
-                        // 5GuMRvQ38upeanVE9gZTY6yPGXQbi1K9cmX51qnxQzpyPdsQ
-                        hex!["d60b3240b281079b932d36e549e3d0d66df3d44824a268195be6ab2daaf8855e"].into(),
-                        hex!["d60b3240b281079b932d36e549e3d0d66df3d44824a268195be6ab2daaf8855e"].unchecked_into(),
+						// 5GuMRvQ38upeanVE9gZTY6yPGXQbi1K9cmX51qnxQzpyPdsQ
+						hex!["d60b3240b281079b932d36e549e3d0d66df3d44824a268195be6ab2daaf8855e"]
+							.into(),
+						hex!["d60b3240b281079b932d36e549e3d0d66df3d44824a268195be6ab2daaf8855e"]
+							.unchecked_into(),
 					),
 					(
-
-                        // 5Gpc7qF343nKSr68PKPvnXUWFrfeDJjpCs7WBgovWzEx2JZx
-                        hex!["d26c69f5c67860a3d5a555ebc1092f47a68d4f8455e22051519b3ea81153c448"].into(),
-                        hex!["d26c69f5c67860a3d5a555ebc1092f47a68d4f8455e22051519b3ea81153c448"].unchecked_into(),
+						// 5Gpc7qF343nKSr68PKPvnXUWFrfeDJjpCs7WBgovWzEx2JZx
+						hex!["d26c69f5c67860a3d5a555ebc1092f47a68d4f8455e22051519b3ea81153c448"]
+							.into(),
+						hex!["d26c69f5c67860a3d5a555ebc1092f47a68d4f8455e22051519b3ea81153c448"]
+							.unchecked_into(),
 					),
 				],
 				vec![
-                    // 5HMo3Dmbw7fZaFYdFZNKGdJ63WrY9Mv8itAVHsJUM3hhWvML
-                    hex!["ea35c8785e0711bfe4698116f68033981e431a64a294529b7019c568df5bb82c"].into(),
+					// 5HMo3Dmbw7fZaFYdFZNKGdJ63WrY9Mv8itAVHsJUM3hhWvML
+					hex!["ea35c8785e0711bfe4698116f68033981e431a64a294529b7019c568df5bb82c"].into(),
 				],
 				// 5HMo3Dmbw7fZaFYdFZNKGdJ63WrY9Mv8itAVHsJUM3hhWvML
 				hex!["ea35c8785e0711bfe4698116f68033981e431a64a294529b7019c568df5bb82c"].into(),
@@ -82,7 +81,11 @@ fn md5_genesis(
 				..Default::default()
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k| (k, 1000000000000000000000000000)).collect(),
+			balances: endowed_accounts
+				.iter()
+				.cloned()
+				.map(|k| (k, 1000000000000000000000000000))
+				.collect(),
 		},
 		transaction_payment: Default::default(),
 		sudo: SudoConfig { key: Some(root_key) },
@@ -102,8 +105,8 @@ fn md5_genesis(
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
-						acc.clone(),                 // account id
-						acc,                         // validator id
+						acc.clone(),        // account id
+						acc,                // validator id
 						session_keys(aura), // session keys
 					)
 				})
@@ -120,4 +123,3 @@ fn md5_genesis(
 		},
 	}
 }
-
