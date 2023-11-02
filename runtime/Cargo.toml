@@ -26,6 +26,7 @@ smallvec = "1.11.0"
 pallet-template = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 pallet-fruniques = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
+# pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features = false }
 pallet-gated-marketplace = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 pallet-rbac = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }
 pallet-confidential-docs = { git = "https://github.com/hashed-io/hashed-pallets", branch = "fix-dependencies-polkadotv1", default-features = false }

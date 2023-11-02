@@ -7,7 +7,7 @@
 
 use std::sync::Arc;
 
-use hashed_parachain_runtime::{opaque::Block, AccountId, Balance, Index as Nonce};
+use hashed_parachain_runtime::{opaque::Block, AccountId, Balance, Nonce};
 
 use sc_client_api::AuxStore;
 pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};

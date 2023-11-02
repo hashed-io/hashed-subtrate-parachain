@@ -1,5 +1,4 @@
 use sc_service::ChainType;
-// use sp_core::sr25519;
 use sp_core::crypto::UncheckedInto;
 
 use hex_literal::hex;
@@ -14,7 +13,7 @@ use hashed_parachain_runtime::{AccountId, AuraId, SudoConfig, EXISTENTIAL_DEPOSI
 
 /// Specialized `ChainSpec` for Hashed Network
 pub type HashedChainSpec =
-	sc_service::GenericChainSpec<hashed_parachain_runtime::GenesisConfig, Extensions>;
+	sc_service::GenericChainSpec<hashed_parachain_runtime::RuntimeGenesisConfig, Extensions>;
 
 /// Gen HASH chain specification
 pub fn get_chain_spec() -> HashedChainSpec {
@@ -77,12 +76,13 @@ fn hashed_genesis(
 	endowed_accounts: Vec<AccountId>,
 	root_key: AccountId,
 	id: ParaId,
-) -> hashed_parachain_runtime::GenesisConfig {
-	hashed_parachain_runtime::GenesisConfig {
+) -> hashed_parachain_runtime::RuntimeGenesisConfig {
+	hashed_parachain_runtime::RuntimeGenesisConfig {
 		system: hashed_parachain_runtime::SystemConfig {
 			code: hashed_parachain_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
+				..Default::default()
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
 			balances: endowed_accounts
@@ -95,7 +95,10 @@ fn hashed_genesis(
 		sudo: SudoConfig { key: Some(root_key) },
 		council: Default::default(),
 		treasury: Default::default(),
-		parachain_info: hashed_parachain_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: hashed_parachain_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: hashed_parachain_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, _)| acc).collect(),
 			candidacy_bond: EXISTENTIAL_DEPOSIT * 16,
@@ -120,6 +123,7 @@ fn hashed_genesis(
 		parachain_system: Default::default(),
 		polkadot_xcm: hashed_parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			..Default::default()
 		},
 	}
 }

@@ -3531,6 +3531,7 @@ checksum = "f93e7192158dbcda357bdec5fb5788eebf8bbac027f3f33e719d29135ae84156"
 name = "hashed-parachain"
 version = "0.1.0"
 dependencies = [
+ "clap",
  "color-print",
  "cumulus-client-cli",
  "cumulus-client-consensus-aura",
@@ -3541,8 +3542,10 @@ dependencies = [
  "cumulus-relay-chain-interface",
  "frame-benchmarking",
  "frame-benchmarking-cli",
+ "futures",
  "hashed-parachain-runtime",
  "hex-literal 0.4.1",
+ "jsonrpsee",
  "log",
  "pallet-transaction-payment-rpc",
  "parity-scale-codec",
@@ -3565,6 +3568,7 @@ dependencies = [
  "sc-transaction-pool",
  "sc-transaction-pool-api",
  "scale-info",
+ "serde",
  "smallvec",
  "sp-api",
  "sp-block-builder",
