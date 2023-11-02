@@ -2,7 +2,9 @@ use cumulus_primitives_core::ParaId;
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
 
-use hashed_parachain_runtime::{AccountId, AuraId, Signature, SudoConfig, EXISTENTIAL_DEPOSIT};
+use hashed_parachain_runtime::{
+	AccountId, AuraId, BitcoinVaultsConfig, Signature, SudoConfig, EXISTENTIAL_DEPOSIT,
+};
 use sc_chain_spec::ChainSpecExtension;
 use sc_service::ChainType;
 use sp_runtime::traits::IdentifyAccount;
@@ -239,5 +241,9 @@ fn testnet_genesis(
 		polkadot_xcm: hashed_parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 		},
+		bitcoin_vaults: BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_MAINNET_URL.as_bytes().to_vec(),
+		},
+		mapped_assets: Default::default(),
 	}
 }
