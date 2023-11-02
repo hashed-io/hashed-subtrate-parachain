@@ -1,15 +1,18 @@
 use sc_service::ChainType;
 // use sp_core::sr25519;
-use sp_core::{crypto::UncheckedInto};
+use sp_core::crypto::UncheckedInto;
 
 use hex_literal::hex;
 
 use super::{
-	/*get_account_id_from_seed, get_collator_keys_from_seed,*/ session_keys, SAFE_XCM_VERSION, Extensions,
+	/*get_account_id_from_seed, get_collator_keys_from_seed,*/ session_keys, Extensions,
+	SAFE_XCM_VERSION,
 };
 
 use cumulus_primitives_core::ParaId;
-use hashed_parachain_runtime::{AccountId, AuraId, SudoConfig, EXISTENTIAL_DEPOSIT};
+use hashed_parachain_runtime::{
+	AccountId, AuraId, BitcoinVaultsConfig, SudoConfig, EXISTENTIAL_DEPOSIT,
+};
 
 /// Specialized `ChainSpec` for Hashed Network
 pub type HashedChainSpec =
@@ -17,19 +20,18 @@ pub type HashedChainSpec =
 
 /// Gen HASH chain specification
 pub fn get_chain_spec() -> HashedChainSpec {
-
-    let mut properties = sc_chain_spec::Properties::new();
+	let mut properties = sc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "HASH".into());
 	properties.insert("tokenDecimals".into(), 18.into());
 	properties.insert("ss58Format".into(), 9072.into());
 	properties.insert("prefix".into(), 9072.into());
 	properties.insert("network".into(), "hashed".into());
 	properties.insert("displayName".into(), "Hashed Network".into());
-	properties.insert("standardAccount".into(),"*25519".into());
+	properties.insert("standardAccount".into(), "*25519".into());
 	properties.insert("website".into(), "https://hashed.network".into());
 
-    // REVIEW: this is where the Hashed genesis is customized, for now,
-    //  it is just a duplicate of the development configuration
+	// REVIEW: this is where the Hashed genesis is customized, for now,
+	//  it is just a duplicate of the development configuration
 	HashedChainSpec::from_genesis(
 		"Hashed Network",
 		"hashed",
@@ -40,21 +42,25 @@ pub fn get_chain_spec() -> HashedChainSpec {
 				vec![
 					(
 						// JA
-                        // haZmb2DUWLEjv3z7NDn5nArSGoMgaN6xeJdAr9TDaeQYpxe6g
-                        hex!["90150e105b07c3357d43ed5c727efb9be347699cb2b5a41a26423b559615b222"].into(),
-                        hex!["90150e105b07c3357d43ed5c727efb9be347699cb2b5a41a26423b559615b222"].unchecked_into(),
+						// haZmb2DUWLEjv3z7NDn5nArSGoMgaN6xeJdAr9TDaeQYpxe6g
+						hex!["90150e105b07c3357d43ed5c727efb9be347699cb2b5a41a26423b559615b222"]
+							.into(),
+						hex!["90150e105b07c3357d43ed5c727efb9be347699cb2b5a41a26423b559615b222"]
+							.unchecked_into(),
 					),
 					(
 						// MdL
-                        // haWa1d98tnLtvNCLSrdWmSo1DYHQDiKBoM9s5xNYtScTUwJ74
-                        hex!["028c3a5c8890c3e98023b35f99a5d904b170612b78b6b9fdd8f60cbf24ab9f59"].into(),
-                        hex!["028c3a5c8890c3e98023b35f99a5d904b170612b78b6b9fdd8f60cbf24ab9f59"].unchecked_into(),
+						// haWa1d98tnLtvNCLSrdWmSo1DYHQDiKBoM9s5xNYtScTUwJ74
+						hex!["028c3a5c8890c3e98023b35f99a5d904b170612b78b6b9fdd8f60cbf24ab9f59"]
+							.into(),
+						hex!["028c3a5c8890c3e98023b35f99a5d904b170612b78b6b9fdd8f60cbf24ab9f59"]
+							.unchecked_into(),
 					),
 				],
 				vec![
 					// GW
 					// haWZRqBVdT9vDAM1Wpga7B1GZ99WDWnXsLyzCBtpwrjPLaZUa
-                    hex!["021a78fcc3ec988411388ec2f8ab25fbb79a7eaacead997d13f211ebe34ce359"].into(),
+					hex!["021a78fcc3ec988411388ec2f8ab25fbb79a7eaacead997d13f211ebe34ce359"].into(),
 				],
 				hex!["021a78fcc3ec988411388ec2f8ab25fbb79a7eaacead997d13f211ebe34ce359"].into(),
 				2093.into(),
@@ -85,7 +91,11 @@ fn hashed_genesis(
 				.to_vec(),
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k| (k, 1000000000000000000000000000)).collect(),
+			balances: endowed_accounts
+				.iter()
+				.cloned()
+				.map(|k| (k, 1000000000000000000000000000))
+				.collect(),
 		},
 		transaction_payment: Default::default(),
 		sudo: SudoConfig { key: Some(root_key) },
@@ -102,8 +112,8 @@ fn hashed_genesis(
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
-						acc.clone(),                 // account id
-						acc,                         // validator id
+						acc.clone(),        // account id
+						acc,                // validator id
 						session_keys(aura), // session keys
 					)
 				})
@@ -117,6 +127,9 @@ fn hashed_genesis(
 		polkadot_xcm: hashed_parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 		},
+		bitcoin_vaults: BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_MAINNET_URL.as_bytes().to_vec(),
+		},
+		mapped_assets: Default::default(),
 	}
 }
-
