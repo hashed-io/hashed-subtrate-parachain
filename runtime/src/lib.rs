@@ -1168,12 +1168,12 @@ construct_runtime!(
 		// Custom Pallets
 		Fruniques: pallet_fruniques::{Pallet, Call, Storage, Event<T>}  = 151,
 		GatedMarketplace: pallet_gated_marketplace::{Pallet, Call, Storage, Event<T>}  = 152,
-		BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Event<T>}  = 154,
+		BitcoinVaults: pallet_bitcoin_vaults::{Pallet, Call, Storage, Config<T>, Event<T>}  = 154,
 		RBAC: pallet_rbac::{Pallet, Call, Storage, Event<T>}  = 155,
 		ConfidentialDocs: pallet_confidential_docs::{Pallet, Call, Storage, Event<T>}  = 156,
 		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>}  = 157,
 		Afloat: pallet_afloat::{Pallet, Call, Storage, Event<T>}  = 158,
-		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Event<T>}  = 159,
+		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Config<T>, Event<T>}  = 159,
 	}
 );
 

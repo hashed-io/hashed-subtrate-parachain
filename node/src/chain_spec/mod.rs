@@ -1,9 +1,10 @@
 use cumulus_primitives_core::ParaId;
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
+use codec::Encode;
 
 use hashed_parachain_runtime::{
-	AccountId, AuraId, BitcoinVaultsConfig, Signature, SudoConfig, EXISTENTIAL_DEPOSIT,
+	AccountId, AuraId, Signature, SudoConfig, EXISTENTIAL_DEPOSIT,
 };
 use sc_chain_spec::ChainSpecExtension;
 use sc_service::ChainType;
@@ -19,6 +20,9 @@ pub type ChainSpec =
 
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
+
+pub const BDK_SERVICES_URL: &[u8] = b"https://bdk.hashed.live";
+pub const BDK_SERVICES_TESTNET_URL: &[u8] = b"https://bdk-test.hashed.live";
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_public_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -246,8 +250,9 @@ fn testnet_genesis(
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},
-		bitcoin_vaults: BitcoinVaultsConfig {
-			bdk_services_url: BDK_SERVICES_MAINNET_URL.as_bytes().to_vec(),
+		bitcoin_vaults: hashed_parachain_runtime::BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_TESTNET_URL.encode(),
+			..Default::default()
 		},
 		mapped_assets: Default::default(),
 	}

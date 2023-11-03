@@ -1,8 +1,9 @@
 use sc_service::ChainType;
 use hex_literal::hex;
 use sp_core::crypto::UncheckedInto;
+use codec::Encode;
 
-use super::{session_keys, Extensions, SAFE_XCM_VERSION};
+use super::{session_keys, Extensions, SAFE_XCM_VERSION, BDK_SERVICES_TESTNET_URL};
 
 use cumulus_primitives_core::ParaId;
 use hashed_parachain_runtime::{AccountId, AuraId, SudoConfig, EXISTENTIAL_DEPOSIT};
@@ -121,5 +122,10 @@ fn md5_genesis(
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},
+		bitcoin_vaults: hashed_parachain_runtime::BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_TESTNET_URL.encode(),
+			..Default::default()
+		},
+		mapped_assets: Default::default(),
 	}
 }
