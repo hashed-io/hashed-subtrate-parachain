@@ -2,10 +2,12 @@ use sc_service::ChainType;
 use sp_core::crypto::UncheckedInto;
 
 use hex_literal::hex;
+use codec::Encode;
 
 use super::{
 	/*get_account_id_from_seed, get_collator_keys_from_seed,*/ session_keys, Extensions,
 	SAFE_XCM_VERSION,
+	BDK_SERVICES_TESTNET_URL
 };
 
 use cumulus_primitives_core::ParaId;
@@ -125,5 +127,10 @@ fn hashed_genesis(
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
 			..Default::default()
 		},
+		bitcoin_vaults: hashed_parachain_runtime::BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_TESTNET_URL.encode(),
+			..Default::default()
+		},
+		mapped_assets: Default::default(),
 	}
 }
