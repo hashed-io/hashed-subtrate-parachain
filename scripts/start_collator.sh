@@ -34,8 +34,6 @@ collator_args=(
     --collator
     --base-path $2/collator-data/
     --force-authoring
-    --ws-port 9946
-    --ws-external
     --rpc-external
     --rpc-cors all
     --rpc-methods unsafe
@@ -72,8 +70,6 @@ relay_args=(
     --base-path $2/relay-data/
     --chain $RESOURCES_PATH/${relay_chain}.json
     --port 30333
-    --ws-port 9944
-    --ws-external
     --rpc-external
     --rpc-cors all
     --rpc-methods unsafe

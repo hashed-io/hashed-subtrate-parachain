@@ -1,11 +1,13 @@
 use sc_service::ChainType;
-// use sp_core::sr25519;
-use sp_core::{crypto::UncheckedInto};
+use sp_core::crypto::UncheckedInto;
 
 use hex_literal::hex;
+use codec::Encode;
 
 use super::{
-	/*get_account_id_from_seed, get_collator_keys_from_seed,*/ session_keys, SAFE_XCM_VERSION, Extensions,
+	/*get_account_id_from_seed, get_collator_keys_from_seed,*/ session_keys, Extensions,
+	SAFE_XCM_VERSION,
+	BDK_SERVICES_TESTNET_URL
 };
 
 use cumulus_primitives_core::ParaId;
@@ -13,19 +15,18 @@ use hashed_parachain_runtime::{AccountId, AuraId, SudoConfig, EXISTENTIAL_DEPOSI
 
 /// Specialized `ChainSpec` for Hashed Network
 pub type HashedChainSpec =
-	sc_service::GenericChainSpec<hashed_parachain_runtime::GenesisConfig, Extensions>;
+	sc_service::GenericChainSpec<hashed_parachain_runtime::RuntimeGenesisConfig, Extensions>;
 
 /// Gen HASH chain specification
 pub fn get_chain_spec() -> HashedChainSpec {
-
-    let mut properties = sc_chain_spec::Properties::new();
+	let mut properties = sc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "LUHN".into());
 	properties.insert("tokenDecimals".into(), 18.into());
 	properties.insert("ss58Format".into(), 11486.into());
 	properties.insert("prefix".into(), 11486.into());
 	properties.insert("network".into(), "luhn".into());
 	properties.insert("displayName".into(), "Luhn Network".into());
-	properties.insert("standardAccount".into(),"*25519".into());
+	properties.insert("standardAccount".into(), "*25519".into());
 	properties.insert("website".into(), "https://luhn.network".into());
 
 	HashedChainSpec::from_genesis(
@@ -38,21 +39,25 @@ pub fn get_chain_spec() -> HashedChainSpec {
 				vec![
 					(
 						// Collator #1
-                        // uhsPQGuXYwjnLvoJWWttQ6FEVtztHSvsjE7UFzxS8mSfoSmts
-                        hex!["1cfc7e49e91696b84bf8e931c16375ea634c3997b36155657faf7dc4716e273e"].into(),
-                        hex!["1cfc7e49e91696b84bf8e931c16375ea634c3997b36155657faf7dc4716e273e"].unchecked_into(),
+						// uhsPQGuXYwjnLvoJWWttQ6FEVtztHSvsjE7UFzxS8mSfoSmts
+						hex!["1cfc7e49e91696b84bf8e931c16375ea634c3997b36155657faf7dc4716e273e"]
+							.into(),
+						hex!["1cfc7e49e91696b84bf8e931c16375ea634c3997b36155657faf7dc4716e273e"]
+							.unchecked_into(),
 					),
 					(
 						// Collator #2
-                        // uhujXWvqSqGrY3K62qeamwCGQd7tTo1hm1s9ZYrgxAZFBLyLv
-                        hex!["84ce3f0bc9ae73d8497c6161927e9e04f39f4bc54579689532d048188c10a77c"].into(),
-                        hex!["84ce3f0bc9ae73d8497c6161927e9e04f39f4bc54579689532d048188c10a77c"].unchecked_into(),
+						// uhujXWvqSqGrY3K62qeamwCGQd7tTo1hm1s9ZYrgxAZFBLyLv
+						hex!["84ce3f0bc9ae73d8497c6161927e9e04f39f4bc54579689532d048188c10a77c"]
+							.into(),
+						hex!["84ce3f0bc9ae73d8497c6161927e9e04f39f4bc54579689532d048188c10a77c"]
+							.unchecked_into(),
 					),
 				],
 				vec![
 					// PH
 					// uhtqJBJ9ZeKguyAG4GJ2S7cme5FvJ661P5NVdHTYKQgvDEQAR
-                    hex!["5cf8957922e4058a953281f82fdced2e4d389fe37c77f41a0fd2379df0caf877"].into(),
+					hex!["5cf8957922e4058a953281f82fdced2e4d389fe37c77f41a0fd2379df0caf877"].into(),
 				],
 				// uhtqJBJ9ZeKguyAG4GJ2S7cme5FvJ661P5NVdHTYKQgvDEQAR
 				hex!["5cf8957922e4058a953281f82fdced2e4d389fe37c77f41a0fd2379df0caf877"].into(),
@@ -64,10 +69,7 @@ pub fn get_chain_spec() -> HashedChainSpec {
 		None,
 		None,
 		Some(properties),
-		Extensions {
-			relay_chain: "kusama".into(),
-			para_id: 2232,
-		},
+		Extensions { relay_chain: "kusama".into(), para_id: 2232 },
 	)
 }
 
@@ -76,21 +78,29 @@ fn hashed_genesis(
 	endowed_accounts: Vec<AccountId>,
 	root_key: AccountId,
 	id: ParaId,
-) -> hashed_parachain_runtime::GenesisConfig {
-	hashed_parachain_runtime::GenesisConfig {
+) -> hashed_parachain_runtime::RuntimeGenesisConfig {
+	hashed_parachain_runtime::RuntimeGenesisConfig {
 		system: hashed_parachain_runtime::SystemConfig {
 			code: hashed_parachain_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
+				..Default::default()
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k| (k, 1000000000000000000000000000)).collect(),
+			balances: endowed_accounts
+				.iter()
+				.cloned()
+				.map(|k| (k, 1000000000000000000000000000))
+				.collect(),
 		},
 		transaction_payment: Default::default(),
 		sudo: SudoConfig { key: Some(root_key) },
 		council: Default::default(),
 		treasury: Default::default(),
-		parachain_info: hashed_parachain_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: hashed_parachain_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: hashed_parachain_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, _)| acc).collect(),
 			candidacy_bond: EXISTENTIAL_DEPOSIT * 16,
@@ -101,8 +111,8 @@ fn hashed_genesis(
 				.into_iter()
 				.map(|(acc, aura)| {
 					(
-						acc.clone(),                 // account id
-						acc,                         // validator id
+						acc.clone(),        // account id
+						acc,                // validator id
 						session_keys(aura), // session keys
 					)
 				})
@@ -115,7 +125,12 @@ fn hashed_genesis(
 		parachain_system: Default::default(),
 		polkadot_xcm: hashed_parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			..Default::default()
 		},
+		bitcoin_vaults: hashed_parachain_runtime::BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_TESTNET_URL.encode(),
+			..Default::default()
+		},
+		mapped_assets: Default::default(),
 	}
 }
-

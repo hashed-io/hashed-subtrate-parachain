@@ -1,8 +1,11 @@
 use cumulus_primitives_core::ParaId;
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
+use codec::Encode;
 
-use hashed_parachain_runtime::{AccountId, AuraId, Signature, SudoConfig, EXISTENTIAL_DEPOSIT};
+use hashed_parachain_runtime::{
+	AccountId, AuraId, Signature, SudoConfig, EXISTENTIAL_DEPOSIT,
+};
 use sc_chain_spec::ChainSpecExtension;
 use sc_service::ChainType;
 use sp_runtime::traits::IdentifyAccount;
@@ -13,10 +16,13 @@ pub mod md5;
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type ChainSpec =
-	sc_service::GenericChainSpec<hashed_parachain_runtime::GenesisConfig, Extensions>;
+	sc_service::GenericChainSpec<hashed_parachain_runtime::RuntimeGenesisConfig, Extensions>;
 
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
+
+pub const BDK_SERVICES_URL: &[u8] = b"https://bdk.hashed.live";
+pub const BDK_SERVICES_TESTNET_URL: &[u8] = b"https://bdk-test.hashed.live";
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_public_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -199,12 +205,13 @@ fn testnet_genesis(
 	endowed_accounts: Vec<AccountId>,
 	root_key: AccountId,
 	id: ParaId,
-) -> hashed_parachain_runtime::GenesisConfig {
-	hashed_parachain_runtime::GenesisConfig {
+) -> hashed_parachain_runtime::RuntimeGenesisConfig {
+	hashed_parachain_runtime::RuntimeGenesisConfig {
 		system: hashed_parachain_runtime::SystemConfig {
 			code: hashed_parachain_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
+				..Default::default()
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
 			balances: endowed_accounts.iter().cloned().map(|k| (k, 1 << 60)).collect(),
@@ -213,7 +220,10 @@ fn testnet_genesis(
 		sudo: SudoConfig { key: Some(root_key) },
 		council: Default::default(),
 		treasury: Default::default(),
-		parachain_info: hashed_parachain_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: hashed_parachain_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: hashed_parachain_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, _)| acc).collect(),
 			candidacy_bond: EXISTENTIAL_DEPOSIT * 16,
@@ -238,6 +248,12 @@ fn testnet_genesis(
 		parachain_system: Default::default(),
 		polkadot_xcm: hashed_parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			..Default::default()
 		},
+		bitcoin_vaults: hashed_parachain_runtime::BitcoinVaultsConfig {
+			bdk_services_url: BDK_SERVICES_TESTNET_URL.encode(),
+			..Default::default()
+		},
+		mapped_assets: Default::default(),
 	}
 }
