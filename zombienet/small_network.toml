@@ -1,0 +1,26 @@
+[relaychain]
+default_image = "parity/polkadot:latest"
+default_command = "polkadot"
+chain = "rococo-local"
+
+  [[relaychain.nodes]]
+  name = "alice"
+  validator = true
+
+  [[relaychain.nodes]]
+  name = "bob"
+  validator = true
+
+[[parachains]]
+id = 2000
+cumulus_based = true
+chain = "md5"
+
+  # run charlie as parachain collator
+  [[parachains.collators]]
+  name = "charlie"
+  validator = true
+#   image = "sebastianmontero/hashed-substrate-collator:latest"
+  command = "../target/release/hashed-parachain"
+  args = ["--force-authoring"]
+#   args = ["--chain", "/var/www/hashed-substrate/md5-collator-raw-spec.json", "--force-authoring"]

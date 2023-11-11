@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Run locally
-# ./target/release/hashed-parachain --collator --base-path /tmp/chain-170223/collator-data/ --force-authoring --port 40333 --ws-port 9946 --ws-external --rpc-external --rpc-cors all --rpc-methods unsafe --chain hashed --  --execution wasm  --base-path /tmp/chain-170223/relay-data/ --chain ./resources/polkadot.json --port 30333 --ws-port 9944 --ws-external --rpc-external --rpc-cors all --rpc-methods unsafe --wasm-execution Compiled --pruning 10000
-# ./target/release/hashed-parachain --collator --base-path /tmp/chain-170223/collator-data/ --force-authoring --port 40333 --ws-port 9946 --ws-external --rpc-external --rpc-cors all --rpc-methods unsafe --chain /home/sebastian/Downloads/hashed-chain-spec-raw-170223.json --  --execution wasm  --base-path /tmp/chain-170223/relay-data/ --chain ./resources/polkadot.json --port 30333 --ws-port 9944 --ws-external --rpc-external --rpc-cors all --rpc-methods unsafe --wasm-execution Compiled --pruning 10000
+# ./target/release/hashed-parachain --collator --base-path /tmp/chain-170223/collator-data/ --force-authoring --port 40333 --rpc-port 9946 --rpc-external --rpc-cors all --rpc-methods unsafe --chain hashed --  --execution wasm  --base-path /tmp/chain-170223/relay-data/ --chain ./resources/polkadot.json --port 30333 --rpc-port 9944 --rpc-external --rpc-cors all --rpc-methods unsafe --wasm-execution Compiled --pruning 10000
+# ./target/release/hashed-parachain --collator --base-path /tmp/chain-170223/collator-data/ --force-authoring --port 40333 --rpc-port 9946 --rpc-external --rpc-cors all --rpc-methods unsafe --chain /home/sebastian/Downloads/hashed-chain-spec-raw-170223.json --  --execution wasm  --base-path /tmp/chain-170223/relay-data/ --chain ./resources/polkadot.json --port 30333 --rpc-port 9944 --rpc-external --rpc-cors all --rpc-methods unsafe --wasm-execution Compiled --pruning 1000
 
 usage="./start_collator.sh [hashed|luhn|md5] <base-data-path>"
 if [ $# -ne 2 ]; then
@@ -34,8 +34,7 @@ collator_args=(
     --collator
     --base-path $2/collator-data/
     --force-authoring
-    --ws-port 9946
-    --ws-external
+    --rpc-port 9946
     --rpc-external
     --rpc-cors all
     --rpc-methods unsafe
@@ -72,8 +71,7 @@ relay_args=(
     --base-path $2/relay-data/
     --chain $RESOURCES_PATH/${relay_chain}.json
     --port 30333
-    --ws-port 9944
-    --ws-external
+    --rpc-port 9944
     --rpc-external
     --rpc-cors all
     --rpc-methods unsafe

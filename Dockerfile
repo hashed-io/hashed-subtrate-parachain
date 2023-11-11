@@ -1,8 +1,10 @@
-FROM paritytech/ci-linux:dafdd6fb-20230127
+FROM paritytech/ci-linux:1.71.0-bullseye
 
-WORKDIR /var/www
+WORKDIR /var/www/hashed-substrate
 
-RUN git clone https://github.com/hashed-io/hashed-substrate-parachain.git hashed-substrate && cd hashed-substrate && git checkout main && cargo build --release
+COPY . .
+RUN cargo build --release
+# RUN git clone https://github.com/hashed-io/hashed-substrate-parachain.git hashed-substrate && cd hashed-substrate && git checkout main && cargo build --release
 
 # COPY ./target/release/hashed-parachain .
 # COPY ./resources/* resources/.
