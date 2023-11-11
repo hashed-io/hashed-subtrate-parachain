@@ -18,7 +18,7 @@ spec:
       containers:
       - name: md5-collator-1
         imagePullPolicy: IfNotPresent
-        image: sebastianmontero/hashed-substrate-collator:4a1340fb6befb30c4ee3885087ecb7f47768fd59
+        image: sebastianmontero/hashed-substrate-collator:a2e1cf34f13ac5194d23463c5a32070df44a6b2b
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
         args: ["md5", "/var/www/hashed/hashed"]
         volumeMounts:
