@@ -1,5 +1,5 @@
 [relaychain]
-default_image = "docker.io/parity/polkadot:v0.9.28"
+default_image = "docker.io/parity/polkadot:v1.3.0-1"
 default_command = "polkadot"
 default_args = [ "-lparachain=debug" ]
 
@@ -14,10 +14,10 @@ chain = "rococo-local"
   validator = true
 
 [[parachains]]
-id = 2000
+id = 1000
 cumulus_based = true
 
   [parachains.collator]
   name = "collator01"
-  image = "docker.io/abhashed/test-collator"
+  image = "docker.io/desneruda/hashed-test-collator"
   command = "hashed-parachain"
