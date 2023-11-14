@@ -6735,7 +6735,6 @@ dependencies = [
 [[package]]
 name = "pallet-confidential-docs"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#6466cef820257e6d26571aba413bf278093710ac"
 dependencies = [
  "frame-benchmarking",
  "frame-support",

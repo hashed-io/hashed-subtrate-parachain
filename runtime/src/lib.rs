@@ -9,6 +9,7 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 pub mod constants;
 mod weights;
 pub mod xcm_config;
+mod migrations;
 use constants::*;
 
 use core::marker::PhantomData;
@@ -122,6 +123,17 @@ pub type UncheckedExtrinsic =
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, RuntimeCall, SignedExtra>;
 
+pub type RuntimeUpgrades = (
+	cumulus_pallet_parachain_system::migration::Migration<Runtime>,
+	pallet_collator_selection::migration::v1::MigrateToV1<Runtime>,
+	pallet_xcm::migration::v1::VersionCheckedMigrateToV1<Runtime>,
+	cumulus_pallet_dmp_queue::migration::Migration<Runtime>,
+	cumulus_pallet_xcmp_queue::migration::Migration<Runtime>,
+	pallet_assets::migration::v1::MigrateToV1<Runtime>,
+	pallet_society::migrations::VersionCheckedMigrateToV2<Runtime, pallet_society::Instance1, Vec<(AccountId,Balances)>::new()>,
+	migrations::identity::v1::MigrateToV2
+);
+
 /// Executive: handles dispatch to the various modules.
 pub type Executive = frame_executive::Executive<
 	Runtime,
@@ -129,6 +141,7 @@ pub type Executive = frame_executive::Executive<
 	frame_system::ChainContext<Runtime>,
 	Runtime,
 	AllPalletsWithSystem,
+	RuntimeUpgrades
 >;
 
 pub type RootOrThreeFifthsOfCouncil = EitherOfDiverse<
@@ -190,14 +203,14 @@ impl_opaque_keys! {
 
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("hashed"),
-	impl_name: create_runtime_str!("hashed"),
+	spec_name: create_runtime_str!("luhn"),
+	impl_name: create_runtime_str!("luhn"),
 	authoring_version: 3,
 	spec_version: 3,
-	impl_version: 0,
+	impl_version: 3,
 	apis: RUNTIME_API_VERSIONS,
-	transaction_version: 1,
-	state_version: 1,
+	transaction_version: 3,
+	state_version: 3,
 };
 
 /// This determines the average expected block time that we are targeting.
