@@ -122,15 +122,22 @@ pub type UncheckedExtrinsic =
 
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, RuntimeCall, SignedExtra>;
-
+parameter_types! {
+	pub const Payouts: Vec<(AccountId, Balance)> = Vec::new();
+	pub const InactiveAccounts: Vec<AccountId> = Vec::new();
+}
 pub type RuntimeUpgrades = (
 	cumulus_pallet_parachain_system::migration::Migration<Runtime>,
 	pallet_collator_selection::migration::v1::MigrateToV1<Runtime>,
 	pallet_xcm::migration::v1::VersionCheckedMigrateToV1<Runtime>,
 	cumulus_pallet_dmp_queue::migration::Migration<Runtime>,
 	cumulus_pallet_xcmp_queue::migration::Migration<Runtime>,
+	pallet_balances::migration::MigrateManyToTrackInactive<Runtime, InactiveAccounts>,
 	pallet_assets::migration::v1::MigrateToV1<Runtime>,
-	pallet_society::migrations::VersionCheckedMigrateToV2<Runtime, pallet_society::Instance1, Vec<(AccountId,Balances)>::new()>,
+	pallet_society::migrations::VersionCheckedMigrateToV2<Runtime, (), Payouts>,
+	pallet_multisig::migrations::v1::MigrateToV1<Runtime>,
+	pallet_preimage::migration::v1::Migration<Runtime>,
+	migrations::uniques::v0::MigrateToV1,
 	migrations::identity::v1::MigrateToV2
 );
 
