@@ -23,17 +23,17 @@ scale-info = { version = "2.10.0", default-features = false, features = ["derive
 smallvec = "1.11.0"
 
 # Hashed Dependencies
-pallet-template = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
-pallet-fruniques = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
-pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
+pallet-template = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
+pallet-fruniques = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
+pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
 # pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features = false }
-pallet-gated-marketplace = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
-pallet-rbac = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
-pallet-confidential-docs = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
+pallet-gated-marketplace = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
+pallet-rbac = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
+pallet-confidential-docs = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
 # pallet-confidential-docs = { path = "../../hashed-pallets/pallets/confidential-docs", default-features = false }
-pallet-afloat = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
-pallet-mapped-assets = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
-pallet-fund-admin-records = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0-fixed-to-tag", default-features = false }
+pallet-afloat = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
+pallet-mapped-assets = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
+pallet-fund-admin-records = { git = "https://github.com/hashed-io/hashed-pallets", branch = "feature/bump-v1.3.0", default-features = false }
 
 # Prebuilt Pallets
 pallet-alliance = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
