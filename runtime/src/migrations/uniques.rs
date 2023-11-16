@@ -12,6 +12,5 @@ pub mod v0 {
 		fn on_runtime_upgrade() -> Weight {
 			pallet_uniques::migration::migrate_to_v1::<Runtime, (), pallet_uniques::Pallet<Runtime, ()>>()
 		}
-
 	}
 }

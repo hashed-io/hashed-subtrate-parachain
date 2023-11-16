@@ -134,11 +134,12 @@ pub type RuntimeUpgrades = (
 	cumulus_pallet_xcmp_queue::migration::Migration<Runtime>,
 	pallet_balances::migration::MigrateManyToTrackInactive<Runtime, InactiveAccounts>,
 	pallet_assets::migration::v1::MigrateToV1<Runtime>,
-	pallet_society::migrations::VersionCheckedMigrateToV2<Runtime, (), Payouts>,
+	// pallet_society::migrations::VersionCheckedMigrateToV2<Runtime, (), Payouts>,
 	pallet_multisig::migrations::v1::MigrateToV1<Runtime>,
 	pallet_preimage::migration::v1::Migration<Runtime>,
 	migrations::uniques::v0::MigrateToV1,
-	migrations::identity::v1::MigrateToV2
+	migrations::general::GeneralMigration,
+	// migrations::identity::v1::MigrateToV2
 );
 
 /// Executive: handles dispatch to the various modules.
