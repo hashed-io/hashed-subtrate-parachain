@@ -1,3 +1,3 @@
-pub mod identity;
+pub mod verifier;
 pub mod uniques;
 pub mod general;
