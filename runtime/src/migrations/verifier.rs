@@ -56,8 +56,8 @@ impl OnRuntimeUpgrade for Migrate {
 		// IdentityOf::<Runtime>::get(key)
 		IdentityOf::<Runtime>::iter().for_each(|(k, v)| {
 			let account_bytes: [u8;32] = k.clone().into();
-			log::info!("a");
-			log::info!("");
+			log::info!("    ");
+			log::info!("    ");
 			log::info!("key account bytes: {:?} ", account_bytes);
 			log::info!("Deposit: {:?}", v.deposit);
 			log::info!("Judgments: {:?}", v.judgements);
@@ -78,8 +78,8 @@ impl OnRuntimeUpgrade for Migrate {
 			match v {
 				Some(info) => {
 					let account_bytes: [u8;32] = info.account.clone().into();
-					log::info!("");
-					log::info!("");
+					log::info!("   ");
+					log::info!("   ");
 					log::info!("account bytes: {:?}", account_bytes);
 					log::info!("fee: {:?}", info.fee);
 					log::info!("fields: {:?}", info.fields.0);
