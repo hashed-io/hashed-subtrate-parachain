@@ -121,6 +121,7 @@ parachain-info = { git = "https://github.com/paritytech/polkadot-sdk", default-f
 [features]
 default = [
 	"std",
+	"hex-literal"
 ]
 std = [
 	"codec/std",

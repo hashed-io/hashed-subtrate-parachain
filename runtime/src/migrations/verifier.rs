@@ -72,6 +72,9 @@ impl OnRuntimeUpgrade for Migrate {
 			log::info!("twitter: {:?}", v.info.twitter);
 		});
 
+		let identity = IdentityOf::<Runtime>::get(TestAccount::get()).unwrap();
+		log::info!("display identity: {:?}", identity.info.display);
+
 		let registrars  = Registrars::<Runtime>::get();
 		log::info!(target: TARGET, "Num registrars: {}", registrars.len());
 		registrars.iter().for_each(|v| {

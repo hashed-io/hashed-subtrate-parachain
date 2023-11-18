@@ -26,6 +26,7 @@ use sp_runtime::{
 	ApplyExtrinsicResult, MultiSignature,
 };
 
+
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -125,6 +126,7 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, RuntimeCall, Si
 parameter_types! {
 	pub const Payouts: Vec<(AccountId, Balance)> = Vec::new();
 	pub const InactiveAccounts: Vec<AccountId> = Vec::new();
+	pub TestAccount: AccountId = hex_literal::hex!["d8033c4d04a502901d24a789da32940085c62eba881c4701a73411288445cc46"].into();
 }
 pub type RuntimeUpgrades = (
 	cumulus_pallet_parachain_system::migration::Migration<Runtime>,
