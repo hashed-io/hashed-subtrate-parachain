@@ -1,25 +1,31 @@
-use frame_support::pallet_prelude::*;
-use frame_support::traits::{Currency, OnRuntimeUpgrade};
+use crate::*;
+use frame_support::{
+	pallet_prelude::*,
+	traits::{Currency, OnRuntimeUpgrade},
+};
 use frame_system::pallet_prelude::BlockNumberFor;
 use pallet_identity::*;
-use crate::*;
 
 #[cfg(feature = "try-runtime")]
 use sp_runtime::TryRuntimeError;
 
 /// The log target.
-const TARGET: &'static str = "runtime::check::migration";
+const TARGET: &'static str = "runtime::verifier::migration";
 
-type BalanceOf<T> =
-	<<T as pallet_identity::Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
-
+type BalanceOf<T> = <<T as pallet_identity::Config>::Currency as Currency<
+	<T as frame_system::Config>::AccountId,
+>>::Balance;
 
 #[frame_support::storage_alias]
 pub(crate) type IdentityOf<T: pallet_identity::Config> = StorageMap<
 	pallet_identity::Pallet<T>,
 	Twox64Concat,
 	<T as frame_system::Config>::AccountId,
-	Registration<BalanceOf<T>, <T as pallet_identity::Config>::MaxRegistrars, <T as pallet_identity::Config>::IdentityInformation>,
+	Registration<
+		BalanceOf<T>,
+		<T as pallet_identity::Config>::MaxRegistrars,
+		<T as pallet_identity::Config>::IdentityInformation,
+	>,
 	OptionQuery,
 >;
 
@@ -44,18 +50,27 @@ pub struct Migrate;
 impl OnRuntimeUpgrade for Migrate {
 
 	fn on_runtime_upgrade() -> Weight {
-		return Weight::zero();
+		StorageVersion::new(2).put::<Society>();
+		return Weight::zero()
 	}
 
 	#[cfg(feature = "try-runtime")]
 	fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
-		log::info!(target: TARGET, "In check post upgrade");
-		let identities  = IdentityOf::<Runtime>::iter_keys().count() as u32;
-		let decodable_identities  = IdentityOf::<Runtime>::iter_values().count() as u32;
-		log::info!(target: TARGET, "Num identities: {}, {}", identities, decodable_identities);
+		log::info!(target: TARGET, "In verifier post upgrade");
+		let vesting_version = StorageVersion::get::<Vesting>();
+		log::info!(
+			"vesting pallet version: {:?}",
+			vesting_version
+		);
+		let society_version = StorageVersion::get::<Society>();
+		ensure!(society_version == 2, "Not all pallet migrations have executed");
+
+		let identities_count = IdentityOf::<Runtime>::iter_keys().count() as u32;
+		let decodable_identities_count = IdentityOf::<Runtime>::iter_values().count() as u32;
+		log::info!(target: TARGET, "Num identities: {}, {}", identities_count, decodable_identities_count);
 		// IdentityOf::<Runtime>::get(key)
 		IdentityOf::<Runtime>::iter().for_each(|(k, v)| {
-			let account_bytes: [u8;32] = k.clone().into();
+			let account_bytes: [u8; 32] = k.clone().into();
 			log::info!("    ");
 			log::info!("    ");
 			log::info!("key account bytes: {:?} ", account_bytes);
@@ -75,22 +90,20 @@ impl OnRuntimeUpgrade for Migrate {
 		let identity = IdentityOf::<Runtime>::get(TestAccount::get()).unwrap();
 		log::info!("display identity: {:?}", identity.info.display);
 
-		let registrars  = Registrars::<Runtime>::get();
-		log::info!(target: TARGET, "Num registrars: {}", registrars.len());
-		registrars.iter().for_each(|v| {
-			match v {
-				Some(info) => {
-					let account_bytes: [u8;32] = info.account.clone().into();
-					log::info!("   ");
-					log::info!("   ");
-					log::info!("account bytes: {:?}", account_bytes);
-					log::info!("fee: {:?}", info.fee);
-					log::info!("fields: {:?}", info.fields.0);
-				},
-				None => log::info!("empty registrar")
-			}
+		let registrars = Registrars::<Runtime>::get();
+		let registrars_count = registrars.len();
+		log::info!(target: TARGET, "Num registrars: {}", registrars_count);
+		registrars.iter().for_each(|v| match v {
+			Some(info) => {
+				let account_bytes: [u8; 32] = info.account.clone().into();
+				log::info!("   ");
+				log::info!("   ");
+				log::info!("account bytes: {:?}", account_bytes);
+				log::info!("fee: {:?}", info.fee);
+				log::info!("fields: {:?}", info.fields.0);
+			},
+			None => log::info!("empty registrar"),
 		});
 		Ok(())
 	}
 }
-
