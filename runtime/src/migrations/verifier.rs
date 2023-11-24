@@ -67,7 +67,7 @@ impl OnRuntimeUpgrade for Migrate {
 
 		let identities_count = IdentityOf::<Runtime>::iter_keys().count() as u32;
 		let decodable_identities_count = IdentityOf::<Runtime>::iter_values().count() as u32;
-		log::info!(target: TARGET, "Num identities: {}, {}", identities_count, decodable_identities_count);
+		log::info!(target: TARGET, "Num identities: {}, decodable: {}", identities_count, decodable_identities_count);
 		// IdentityOf::<Runtime>::get(key)
 		IdentityOf::<Runtime>::iter().for_each(|(k, v)| {
 			let account_bytes: [u8; 32] = k.clone().into();

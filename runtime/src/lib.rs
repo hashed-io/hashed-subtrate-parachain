@@ -139,6 +139,7 @@ pub type RuntimeUpgrades = (
 	pallet_multisig::migrations::v1::MigrateToV1<Runtime>,
 	pallet_preimage::migration::v1::Migration<Runtime>,
 	migrations::uniques::v0::MigrateToV1,
+	migrations::vesting::v0::MigrateToV1,
 	migrations::general::GeneralMigration,
 	migrations::verifier::Migrate
 );
