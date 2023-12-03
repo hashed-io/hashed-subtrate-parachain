@@ -43,14 +43,14 @@ use frame_support::{
 		constants::WEIGHT_REF_TIME_PER_SECOND, ConstantMultiplier, Weight, WeightToFeeCoefficient,
 		WeightToFeeCoefficients, WeightToFeePolynomial,
 	},
-	PalletId, RuntimeDebugNoBound,
+	PalletId,
 };
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot, EnsureSigned,
 };
 pub use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-pub use sp_runtime::{MultiAddress, Perbill, Percent, Permill,};
+pub use sp_runtime::{MultiAddress, Perbill, Percent, Permill,RuntimeDebug};
 use xcm_config::{XcmConfig, XcmOriginToTransactDispatchOrigin};
 
 #[cfg(any(feature = "std", test))]
@@ -129,6 +129,8 @@ parameter_types! {
 	pub TestAccount: AccountId = hex_literal::hex!["d8033c4d04a502901d24a789da32940085c62eba881c4701a73411288445cc46"].into();
 }
 pub type RuntimeUpgrades = (
+	migrations::system::v0::Migrate,
+	migrations::parachain_system::v1::Migrate,
 	cumulus_pallet_parachain_system::migration::Migration<Runtime>,
 	pallet_collator_selection::migration::v1::MigrateToV1<Runtime>,
 	pallet_xcm::migration::v1::VersionCheckedMigrateToV1<Runtime>,
@@ -138,10 +140,16 @@ pub type RuntimeUpgrades = (
 	pallet_assets::migration::v1::MigrateToV1<Runtime>,
 	pallet_multisig::migrations::v1::MigrateToV1<Runtime>,
 	pallet_preimage::migration::v1::Migration<Runtime>,
+	migrations::transaction_payment::v0::Migrate,
 	migrations::uniques::v0::MigrateToV1,
 	migrations::vesting::v0::MigrateToV1,
 	migrations::general::GeneralMigration,
-	migrations::verifier::Migrate
+	migrations::identity_verifier::Migrate,
+	migrations::aura_verifier::Migrate,
+	migrations::balances_verifier::Migrate,
+	migrations::collator_selection_verifier::Migrate,
+	migrations::dmp_queue_verifier::Migrate,
+	migrations::proxy_verifier::Migrate
 );
 
 /// Executive: handles dispatch to the various modules.
@@ -821,7 +829,7 @@ use codec::{Decode, Encode, MaxEncodedLen};
 	PartialOrd,
 	Encode,
 	Decode,
-	RuntimeDebugNoBound,
+	RuntimeDebug,
 	MaxEncodedLen,
 	scale_info::TypeInfo,
 )]

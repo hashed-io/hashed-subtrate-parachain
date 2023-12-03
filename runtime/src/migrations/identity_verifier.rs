@@ -10,7 +10,7 @@ use pallet_identity::*;
 use sp_runtime::TryRuntimeError;
 
 /// The log target.
-const TARGET: &'static str = "runtime::verifier::migration";
+const TARGET: &'static str = "runtime::identity_verifier::migration";
 
 type BalanceOf<T> = <<T as pallet_identity::Config>::Currency as Currency<
 	<T as frame_system::Config>::AccountId,
@@ -50,13 +50,12 @@ pub struct Migrate;
 impl OnRuntimeUpgrade for Migrate {
 
 	fn on_runtime_upgrade() -> Weight {
-		StorageVersion::new(2).put::<Society>();
 		return Weight::zero()
 	}
 
 	#[cfg(feature = "try-runtime")]
 	fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
-		log::info!(target: TARGET, "In verifier post upgrade");
+		log::info!(target: TARGET, "In identity verifier post upgrade");
 		let vesting_version = StorageVersion::get::<Vesting>();
 		log::info!(
 			"vesting pallet version: {:?}",

@@ -11,7 +11,7 @@ use sp_runtime::TryRuntimeError;
 
 const TARGET: &'static str = "runtime::vesting::migration";
 
-type BalanceOf<T> = <<T as pallet_identity::Config>::Currency as Currency<
+type BalanceOf<T> = <<T as pallet_vesting::Config>::Currency as Currency<
 	<T as frame_system::Config>::AccountId,
 >>::Balance;
 
