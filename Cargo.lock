@@ -1524,7 +1524,7 @@ dependencies = [
 [[package]]
 name = "common"
 version = "0.1.0"
-source = "git+https://github.com/w3f/ring-proof#edd1e90b847e560bf60fc2e8712235ccfa11a9a9"
+source = "git+https://github.com/w3f/ring-proof#61e7b528bc0170d6bf541be32440d569b784425d"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -1532,6 +1532,7 @@ dependencies = [
  "ark-serialize",
  "ark-std",
  "fflonk",
+ "getrandom_or_panic",
  "merlin 3.0.0",
  "rand_chacha 0.3.1",
 ]
@@ -3304,7 +3305,7 @@ dependencies = [
 [[package]]
 name = "fflonk"
 version = "0.1.0"
-source = "git+https://github.com/w3f/fflonk#1beb0585e1c8488956fac7f05da061f9b41e8948"
+source = "git+https://github.com/w3f/fflonk#95f3a57d1f4252fe95310c1567d153f25f3066b4"
 dependencies = [
  "ark-ec",
  "ark-ff",
@@ -3939,6 +3940,15 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
+]
+
+[[package]]
+name = "getrandom_or_panic"
+version = "0.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ea1015b5a70616b688dc230cfe50c8af89d972cb132d5a622814d29773b10b9"
+dependencies = [
+ "rand_core 0.6.4",
 ]
 
 [[package]]
@@ -6429,7 +6439,7 @@ dependencies = [
 [[package]]
 name = "pallet-afloat"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6689,7 +6699,7 @@ dependencies = [
 [[package]]
 name = "pallet-bitcoin-vaults"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6782,7 +6792,7 @@ dependencies = [
 [[package]]
 name = "pallet-confidential-docs"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6905,7 +6915,7 @@ dependencies = [
 [[package]]
 name = "pallet-fruniques"
 version = "0.1.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6923,7 +6933,7 @@ dependencies = [
 [[package]]
 name = "pallet-fund-admin-records"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6939,7 +6949,7 @@ dependencies = [
 [[package]]
 name = "pallet-gated-marketplace"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7065,7 +7075,7 @@ dependencies = [
 [[package]]
 name = "pallet-mapped-assets"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7310,7 +7320,7 @@ dependencies = [
 [[package]]
 name = "pallet-rbac"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7551,7 +7561,7 @@ dependencies = [
 [[package]]
 name = "pallet-template"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#73cd1343482918ee959a83fbebaedf999dc14961"
+source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -9849,7 +9859,7 @@ dependencies = [
 [[package]]
 name = "ring"
 version = "0.1.0"
-source = "git+https://github.com/w3f/ring-proof#edd1e90b847e560bf60fc2e8712235ccfa11a9a9"
+source = "git+https://github.com/w3f/ring-proof#61e7b528bc0170d6bf541be32440d569b784425d"
 dependencies = [
  "ark-ec",
  "ark-ff",

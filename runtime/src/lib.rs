@@ -144,6 +144,7 @@ pub type RuntimeUpgrades = (
 	migrations::uniques::v0::MigrateToV1,
 	migrations::vesting::v0::MigrateToV1,
 	migrations::authorship::v0::Migrate,
+	pallet_fruniques::migration::v0::MigrateToV1<Runtime>,
 	migrations::general::GeneralMigration,
 	migrations::identity_verifier::Migrate,
 	migrations::aura_verifier::Migrate,
