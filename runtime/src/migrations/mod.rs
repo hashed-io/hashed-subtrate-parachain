@@ -10,3 +10,6 @@ pub mod vesting;
 pub mod collator_selection_verifier;
 pub mod dmp_queue_verifier;
 pub mod proxy_verifier;
+pub mod society_verifier;
+pub mod xcmp_queue_verifier;
+pub mod authorship;

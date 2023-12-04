@@ -143,13 +143,16 @@ pub type RuntimeUpgrades = (
 	migrations::transaction_payment::v0::Migrate,
 	migrations::uniques::v0::MigrateToV1,
 	migrations::vesting::v0::MigrateToV1,
+	migrations::authorship::v0::Migrate,
 	migrations::general::GeneralMigration,
 	migrations::identity_verifier::Migrate,
 	migrations::aura_verifier::Migrate,
 	migrations::balances_verifier::Migrate,
 	migrations::collator_selection_verifier::Migrate,
 	migrations::dmp_queue_verifier::Migrate,
-	migrations::proxy_verifier::Migrate
+	migrations::proxy_verifier::Migrate,
+	migrations::society_verifier::Migrate,
+	migrations::xcmp_queue_verifier::Migrate
 );
 
 /// Executive: handles dispatch to the various modules.

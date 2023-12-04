@@ -6,6 +6,7 @@ use frame_support::{
 	traits::{Currency, OnRuntimeUpgrade},
 };
 use frame_system::pallet_prelude::BlockNumberFor;
+use frame_system::ConsumedWeight;
 #[cfg(feature = "try-runtime")]
 use sp_runtime::TryRuntimeError;
 
@@ -34,6 +35,12 @@ pub mod v0 {
 	#[frame_support::storage_alias]
 	pub(super) type Events<T: frame_system::Config> =
 		StorageValue<frame_system::Pallet<T>, Vec<Box<EventRecord<<T as frame_system::Config>::RuntimeEvent, <T as frame_system::Config>::Hash>>>, ValueQuery>;
+
+	#[frame_support::storage_alias]
+	pub(super) type BlockWeight<T: frame_system::Config> = StorageValue<frame_system::Pallet<T>, ConsumedWeight, ValueQuery>;
+
+	#[frame_support::storage_alias]
+	pub(super) type Digest<T: frame_system::Config> = StorageValue<frame_system::Pallet<T>, generic::Digest, ValueQuery>;
 
 	pub struct Migrate;
 
@@ -104,6 +111,9 @@ pub mod v0 {
 				log::info!("Sufficients: {:?}", v.sufficients);
 				log::info!("Data: {:?}", v.data);
 			});
+			log::info!(target: TARGET, "block weight: {:?}", BlockWeight::<Runtime>::get());
+			log::info!(target: TARGET, "digest: {:?}", Digest::<Runtime>::get());
+			log::info!(target: TARGET, "last runtime upgrade: {:?}", frame_system::LastRuntimeUpgrade::<Runtime>::get());
 			// let events = Events::<Runtime>::get();
 			// log::info!(target: TARGET, "num_events: {}", events.len());
 			// events.iter().take(10).for_each(|v|{

@@ -55,7 +55,6 @@ use sp_runtime::traits::Saturating;
 		}
 		//We are just updating the storage version, as the pallet is already on the latest version
 		fn on_runtime_upgrade() -> Weight {
-			let storage_version = StorageVersion::<Runtime>::get();
 			let mut writes = 0;
 			let storage_version = StorageVersion::<Runtime>::get();
 			if storage_version == Releases::V1Ancient {
