@@ -1,13 +1,11 @@
 use crate::*;
 use frame_support::{
 	pallet_prelude::*,
-	traits::{Currency, OnRuntimeUpgrade},
+	traits::OnRuntimeUpgrade
 };
-use frame_system::pallet_prelude::BlockNumberFor;
 use cumulus_pallet_xcmp_queue::{QueueConfigData, OverweightIndex};
 use cumulus_primitives_core::relay_chain::BlockNumber as RelayBlockNumber;
 use crate::ParaId;
-use super::*;
 
 #[cfg(feature = "try-runtime")]
 use sp_runtime::TryRuntimeError;
@@ -32,7 +30,7 @@ impl OnRuntimeUpgrade for Migrate {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+	fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 		log::info!(target: TARGET, "In post upgrade");
 		let overweight_tracked_count = Overweight::<Runtime>::count();
 		let overweight_count = Overweight::<Runtime>::iter_keys().count() as u32;

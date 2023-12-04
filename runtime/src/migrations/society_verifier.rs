@@ -1,10 +1,8 @@
 use crate::*;
 use frame_support::{
 	pallet_prelude::*,
-	traits::{Currency, OnRuntimeUpgrade},
+	traits::OnRuntimeUpgrade,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
-use super::*;
 
 #[cfg(feature = "try-runtime")]
 use sp_runtime::TryRuntimeError;
@@ -21,7 +19,7 @@ impl OnRuntimeUpgrade for Migrate {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+	fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 		log::info!(target: TARGET, "In post upgrade");
 
 		let candidates_count = pallet_society::Candidates::<Runtime>::iter_keys().count() as u32;

@@ -87,7 +87,7 @@ use sp_runtime::traits::Saturating;
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 			let result = pallet_vesting::migrations::v1::post_migrate::<Runtime>();
 			match result {
 				Ok(_) => {

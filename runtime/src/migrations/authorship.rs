@@ -1,12 +1,9 @@
-use super::*;
 use crate::*;
 use frame_support::{
 	pallet_prelude::*,
-	traits::{Currency, OnRuntimeUpgrade},
+	traits::OnRuntimeUpgrade
 };
 
-#[cfg(feature = "try-runtime")]
-use sp_runtime::TryRuntimeError;
 
 /// The log target.
 const TARGET: &'static str = "runtime::authorship::migration";

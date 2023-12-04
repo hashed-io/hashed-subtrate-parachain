@@ -2,7 +2,7 @@ use frame_support::traits::OnRuntimeUpgrade;
 use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_runtime::RuntimeDebug;
-use pallet_transaction_payment::{Multiplier, NextFeeMultiplierOnEmpty};
+use pallet_transaction_payment::Multiplier;
 use crate::*;
 
 #[cfg(feature = "try-runtime")]
@@ -67,7 +67,7 @@ use sp_runtime::traits::Saturating;
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 			log::info!(target: TARGET, "In post upgrade");
 			let storage_version = StorageVersion::<Runtime>::get();
 			ensure!(storage_version == Releases::V2, "Storage version was not updated");

@@ -1,12 +1,11 @@
-use super::*;
+
 use crate::*;
 use cumulus_pallet_parachain_system::MessagingStateSnapshot;
 use cumulus_primitives_core::{AbridgedHostConfiguration, PersistedValidationData};
 use frame_support::{
 	pallet_prelude::*,
-	traits::{Currency, OnRuntimeUpgrade},
+	traits::OnRuntimeUpgrade,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
 #[cfg(feature = "try-runtime")]
 use sp_runtime::TryRuntimeError;
 
@@ -112,7 +111,7 @@ pub mod v1 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 			log::info!(target: TARGET, "In post upgrade, should be able to decode host configuration with the new structure");
 			let host_configuration = HostConfiguration::<Runtime>::get().unwrap();
 			log::info!("    ");

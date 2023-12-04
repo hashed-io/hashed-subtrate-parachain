@@ -1,11 +1,9 @@
-use super::*;
 use crate::*;
 use frame_system::EventRecord;
 use frame_support::{
 	pallet_prelude::*,
-	traits::{Currency, OnRuntimeUpgrade},
+	traits::OnRuntimeUpgrade,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
 use frame_system::ConsumedWeight;
 #[cfg(feature = "try-runtime")]
 use sp_runtime::TryRuntimeError;
@@ -14,8 +12,8 @@ use sp_runtime::TryRuntimeError;
 const TARGET: &'static str = "runtime::system::migration";
 
 pub mod v0 {
-	use cumulus_primitives_core::relay_chain::AsyncBackingParams;
-	use sp_runtime::traits::Saturating;
+	// use cumulus_primitives_core::relay_chain::AsyncBackingParams;
+	// use sp_runtime::traits::Saturating;
 
 	use super::*;
 
@@ -95,7 +93,7 @@ pub mod v0 {
 		}
 
 		#[cfg(feature = "try-runtime")]
-		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 			log::info!(target: TARGET, "In post upgrade");
 			let num_account_keys = frame_system::Account::<Runtime>::iter_keys().count() as u32;
 			let num_accounts = frame_system::Account::<Runtime>::iter_values().count() as u32;

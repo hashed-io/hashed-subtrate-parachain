@@ -1,10 +1,9 @@
 use crate::*;
 use frame_support::{
 	pallet_prelude::*,
-	traits::{Currency, OnRuntimeUpgrade},
+	traits::OnRuntimeUpgrade,
 };
-use frame_system::pallet_prelude::BlockNumberFor;
-use super::*;
+
 use cumulus_pallet_dmp_queue::{ConfigData, PageIndexData};
 
 #[cfg(feature = "try-runtime")]
@@ -28,7 +27,7 @@ impl OnRuntimeUpgrade for Migrate {
 	}
 
 	#[cfg(feature = "try-runtime")]
-	fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
+	fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 		log::info!(target: TARGET, "In post upgrade");
 
 		log::info!(target: TARGET, "Configuration: {:?}", Configuration::<Runtime>::get());
