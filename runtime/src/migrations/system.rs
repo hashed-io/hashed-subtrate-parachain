@@ -100,14 +100,14 @@ pub mod v0 {
 			log::info!(target: TARGET, "account keys: {}, decodable accounts: {}", num_account_keys, num_accounts);
 			frame_system::Account::<Runtime>::iter().take(10).for_each(|(k, v)| {
 				let account_bytes: [u8; 32] = k.clone().into();
-				log::info!("    ");
-				log::info!("    ");
-				log::info!("key account bytes: {:?} ", account_bytes);
-				log::info!("Nonce: {:?}", v.nonce);
-				log::info!("Consumers: {:?}", v.consumers);
-				log::info!("Providers: {:?}", v.providers);
-				log::info!("Sufficients: {:?}", v.sufficients);
-				log::info!("Data: {:?}", v.data);
+				log::info!(target: TARGET, "    ");
+				log::info!(target: TARGET, "    ");
+				log::info!(target: TARGET, "key account bytes: {:?} ", account_bytes);
+				log::info!(target: TARGET, "Nonce: {:?}", v.nonce);
+				log::info!(target: TARGET, "Consumers: {:?}", v.consumers);
+				log::info!(target: TARGET, "Providers: {:?}", v.providers);
+				log::info!(target: TARGET, "Sufficients: {:?}", v.sufficients);
+				log::info!(target: TARGET, "Data: {:?}", v.data);
 			});
 			log::info!(target: TARGET, "block weight: {:?}", BlockWeight::<Runtime>::get());
 			log::info!(target: TARGET, "digest: {:?}", Digest::<Runtime>::get());

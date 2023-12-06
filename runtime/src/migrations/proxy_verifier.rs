@@ -31,11 +31,14 @@ impl OnRuntimeUpgrade for Migrate {
 			log::info!("    ");
 			log::info!("    ");
 			log::info!("key account bytes: {:?} ", account_bytes);
-			let delegate_bytes: [u8; 32] = v.0[0].delegate.clone().into();
-			log::info!("delegate bytes: {:?}", delegate_bytes);
-			log::info!("proxy_type: {:?}", v.0[0].proxy_type);
-			log::info!("delay: {:?}", v.0[0].delay);
+			v.0.iter().for_each(|d| {
+				let delegate_bytes: [u8; 32] = d.delegate.clone().into();
+				log::info!("delegate bytes: {:?}", delegate_bytes);
+				log::info!("proxy_type: {:?}", d.proxy_type);
+				log::info!("delay: {:?}", d.delay);
+			});
 			log::info!("value: {:?}", v.1);
+
 		});
 		Ok(())
 	}

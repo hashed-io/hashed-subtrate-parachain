@@ -225,8 +225,10 @@ impl_opaque_keys! {
 
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("luhn"),
-	impl_name: create_runtime_str!("luhn"),
+	// spec_name: create_runtime_str!("luhn"), //for the mainnetwork it can not be changed
+	// impl_name: create_runtime_str!("luhn"),
+	spec_name: create_runtime_str!("hashed"), // for md5 rococo
+	impl_name: create_runtime_str!("hashed"),
 	authoring_version: 3,
 	spec_version: 3,
 	impl_version: 3,
