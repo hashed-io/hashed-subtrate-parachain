@@ -129,7 +129,6 @@ parameter_types! {
 	pub TestAccount: AccountId = hex_literal::hex!["d8033c4d04a502901d24a789da32940085c62eba881c4701a73411288445cc46"].into();
 }
 pub type RuntimeUpgrades = (
-	migrations::system::v0::Migrate,
 	migrations::parachain_system::v1::Migrate,
 	cumulus_pallet_parachain_system::migration::Migration<Runtime>,
 	pallet_collator_selection::migration::v1::MigrateToV1<Runtime>,
@@ -146,6 +145,7 @@ pub type RuntimeUpgrades = (
 	migrations::authorship::v0::Migrate,
 	pallet_fruniques::migration::v0::MigrateToV1<Runtime>,
 	migrations::general::GeneralMigration,
+	migrations::system_verifier::Migrate,
 	migrations::identity_verifier::Migrate,
 	migrations::aura_verifier::Migrate,
 	migrations::balances_verifier::Migrate,

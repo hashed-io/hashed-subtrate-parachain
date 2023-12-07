@@ -4,7 +4,7 @@ pub mod balances_verifier;
 pub mod identity_verifier;
 pub mod aura_verifier;
 pub mod parachain_system;
-pub mod system;
+pub mod system_verifier;
 pub mod transaction_payment;
 pub mod vesting;
 pub mod collator_selection_verifier;
