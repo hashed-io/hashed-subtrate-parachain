@@ -4169,7 +4169,7 @@ dependencies = [
 
 [[package]]
 name = "hashed-parachain-runtime"
-version = "0.1.0-dev"
+version = "0.1.1"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-dmp-queue",
@@ -6439,7 +6439,7 @@ dependencies = [
 [[package]]
 name = "pallet-afloat"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6699,7 +6699,7 @@ dependencies = [
 [[package]]
 name = "pallet-bitcoin-vaults"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6792,7 +6792,7 @@ dependencies = [
 [[package]]
 name = "pallet-confidential-docs"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6915,7 +6915,7 @@ dependencies = [
 [[package]]
 name = "pallet-fruniques"
 version = "0.1.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6933,7 +6933,7 @@ dependencies = [
 [[package]]
 name = "pallet-fund-admin-records"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6949,7 +6949,7 @@ dependencies = [
 [[package]]
 name = "pallet-gated-marketplace"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7075,7 +7075,7 @@ dependencies = [
 [[package]]
 name = "pallet-mapped-assets"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7320,7 +7320,7 @@ dependencies = [
 [[package]]
 name = "pallet-rbac"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7561,7 +7561,7 @@ dependencies = [
 [[package]]
 name = "pallet-template"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?branch=feature/bump-v1.3.0#1cca49115ea6f07cfccc794ce53716258696c47c"
+source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.10#f85407cedc35bf264b58e1be713cc14a1f15aa21"
 dependencies = [
  "frame-benchmarking",
  "frame-support",

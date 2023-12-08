@@ -1138,7 +1138,7 @@ impl pallet_gated_marketplace::Config for Runtime {
 impl pallet_afloat::Config for Runtime {
   type RuntimeEvent = RuntimeEvent;
   type Currency = Balances;
-  type TimeProvider = Timestamp;
+//   type TimeProvider = Timestamp;
   //type RemoveOrigin = EnsureRoot<AccountId>;
   type Rbac = RBAC;
   type ItemId = u32;

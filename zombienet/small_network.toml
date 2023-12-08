@@ -1,3 +1,4 @@
+# HOW TO RUN: zombienet-linux-x64 spawn --provider native small_network.toml
 [relaychain]
 default_image = "parity/polkadot:latest"
 default_command = "polkadot"
