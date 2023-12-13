@@ -18,7 +18,7 @@ spec:
       containers:
       - name: md5-collator-2
         imagePullPolicy: IfNotPresent
-        image: sebastianmontero/hashed-substrate-collator:3e17bdf232a041ad7914a678e28b85983b1f4647
+        image: sebastianmontero/hashed-substrate-collator-md5:da13ebb0abb495d17969f430906eb8dcc27cfb50
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
         args: ["md5", "/var/www/hashed/hashed"]
         volumeMounts:
@@ -31,6 +31,10 @@ spec:
             value: "/ip4/0.0.0.0/tcp/40333/ws"
           - name: PUBLIC_ADDR
             value: "/dns/c2.md5.p2p.hashed.live/tcp/443/wss"
+          - name: RELAY_PRUNING
+            value: "1000"
+          # - name: RUST_LOG
+          #   value: "parachain=debug"
           # - name: RUST_LOG
           #   value: "sub-libp2p=trace"
           # - name: RUST_LOG
@@ -43,8 +47,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "8G"
-            cpu: "2"
+            memory: "7G"
+            cpu: "1.5"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -53,6 +57,8 @@ spec:
         - containerPort: 9946
         - containerPort: 30333
         - containerPort: 40333
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.xlarge
   volumeClaimTemplates:
   - metadata:
       name: md5-collator-2-pvc
