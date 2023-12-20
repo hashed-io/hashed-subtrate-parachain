@@ -128,33 +128,6 @@ parameter_types! {
 	pub const InactiveAccounts: Vec<AccountId> = Vec::new();
 	pub TestAccount: AccountId = hex_literal::hex!["d8033c4d04a502901d24a789da32940085c62eba881c4701a73411288445cc46"].into();
 }
-pub type RuntimeUpgrades = (
-	migrations::parachain_system::v1::Migrate,
-	cumulus_pallet_parachain_system::migration::Migration<Runtime>,
-	pallet_collator_selection::migration::v1::MigrateToV1<Runtime>,
-	pallet_xcm::migration::v1::VersionCheckedMigrateToV1<Runtime>,
-	cumulus_pallet_dmp_queue::migration::Migration<Runtime>,
-	cumulus_pallet_xcmp_queue::migration::Migration<Runtime>,
-	pallet_balances::migration::MigrateManyToTrackInactive<Runtime, InactiveAccounts>,
-	pallet_assets::migration::v1::MigrateToV1<Runtime>,
-	pallet_multisig::migrations::v1::MigrateToV1<Runtime>,
-	pallet_preimage::migration::v1::Migration<Runtime>,
-	migrations::transaction_payment::v0::Migrate,
-	migrations::uniques::v0::MigrateToV1,
-	migrations::vesting::v0::MigrateToV1,
-	migrations::authorship::v0::Migrate,
-	pallet_fruniques::migration::v0::MigrateToV1<Runtime>,
-	migrations::general::GeneralMigration,
-	migrations::system_verifier::Migrate,
-	migrations::identity_verifier::Migrate,
-	migrations::aura_verifier::Migrate,
-	migrations::balances_verifier::Migrate,
-	migrations::collator_selection_verifier::Migrate,
-	migrations::dmp_queue_verifier::Migrate,
-	migrations::proxy_verifier::Migrate,
-	migrations::society_verifier::Migrate,
-	migrations::xcmp_queue_verifier::Migrate
-);
 
 /// Executive: handles dispatch to the various modules.
 pub type Executive = frame_executive::Executive<
@@ -162,8 +135,7 @@ pub type Executive = frame_executive::Executive<
 	Block,
 	frame_system::ChainContext<Runtime>,
 	Runtime,
-	AllPalletsWithSystem,
-	RuntimeUpgrades
+	AllPalletsWithSystem
 >;
 
 pub type RootOrThreeFifthsOfCouncil = EitherOfDiverse<
@@ -229,12 +201,12 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	impl_name: create_runtime_str!("luhn"),
 	// spec_name: create_runtime_str!("hashed"), // for md5 rococo
 	// impl_name: create_runtime_str!("hashed"),
-	authoring_version: 3,
-	spec_version: 3,
-	impl_version: 3,
+	authoring_version: 4,
+	spec_version: 4,
+	impl_version: 4,
 	apis: RUNTIME_API_VERSIONS,
-	transaction_version: 3,
-	state_version: 3,
+	transaction_version: 4,
+	state_version: 4,
 };
 
 /// This determines the average expected block time that we are targeting.
@@ -318,7 +290,7 @@ parameter_types! {
 		})
 		.avg_block_initialization(AVERAGE_ON_INITIALIZE_RATIO)
 		.build_or_panic();
-	pub const SS58Prefix: u16 = 42;
+	pub const SS58Prefix: u16 = 9072;
 }
 
 // Configure FRAME pallets to include in runtime.

@@ -30,7 +30,7 @@ use sc_executor::{
 };
 use sc_network::NetworkBlock;
 use sc_network_sync::SyncingService;
-use sc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
+use sc_service::{ChainSpec,Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
 use sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
 use sc_transaction_pool_api::OffchainTransactionPoolFactory;
 use sp_keystore::KeystorePtr;
@@ -432,4 +432,39 @@ pub async fn start_parachain_node(
 	hwbench: Option<sc_sysinfo::HwBench>,
 ) -> sc_service::error::Result<(TaskManager, Arc<ParachainClient>)> {
 	start_node_impl(parachain_config, polkadot_config, collator_options, para_id, hwbench).await
+}
+
+
+/// Can be called for a `Configuration` to check if it is a configuration for
+/// the `Hashed` network.
+pub trait IdentifyVariant {
+	/// Returns `true` if this is a configuration for the `Hashed` network.
+	fn is_hashed(&self) -> bool;
+
+	/// Returns `true` if this is a configuration for the `Luhn` network.
+	fn is_luhn(&self) -> bool;
+
+	/// Returns `true` if this is a configuration for the `MD5` network.
+	fn is_md5(&self) -> bool;
+
+	/// Returns `true` if this is a configuration for the dev network.
+	fn is_dev(&self) -> bool;
+}
+
+impl IdentifyVariant for Box<dyn ChainSpec> {
+	fn is_hashed(&self) -> bool {
+		self.id().starts_with("hashed")
+	}
+
+	fn is_luhn(&self) -> bool {
+		self.id().starts_with("luhn")
+	}
+
+	fn is_md5(&self) -> bool {
+		self.id().starts_with("md5")
+	}
+
+	fn is_dev(&self) -> bool {
+		self.id().ends_with("dev")
+	}
 }
