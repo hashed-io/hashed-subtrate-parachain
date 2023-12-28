@@ -51,8 +51,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "14G"
-            cpu: "3.5"
+            memory: "15G"
+            cpu: "7.5"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -62,7 +62,7 @@ spec:
         - containerPort: 30333
         - containerPort: 40333
       nodeSelector:
-        node.kubernetes.io/instance-type: m5.xlarge
+        node.kubernetes.io/instance-type: c6id.2xlarge
   volumeClaimTemplates:
   - metadata:
       name: hashed-collator-1-pvc

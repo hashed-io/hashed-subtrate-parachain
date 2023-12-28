@@ -45,8 +45,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "8G"
-            cpu: "2"
+            memory: "15G"
+            cpu: "7.5"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -55,6 +55,8 @@ spec:
         - containerPort: 9946
         - containerPort: 30333
         - containerPort: 40333
+      nodeSelector:
+        node.kubernetes.io/instance-type: c6id.2xlarge
   volumeClaimTemplates:
   - metadata:
       name: hashed-collator-3-pvc
