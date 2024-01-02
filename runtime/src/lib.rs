@@ -556,7 +556,7 @@ impl<N: Get<u128>> ConversionFromAssetBalance<u128, (), u128> for MulBy<N> {
 		return balance.checked_mul(N::get()).ok_or(())
 	}
 	#[cfg(feature = "runtime-benchmarks")]
-	fn ensure_successful(_: u32) {}
+	fn ensure_successful(_: ()) {}
 }
 
 impl pallet_treasury::Config for Runtime {
@@ -582,6 +582,7 @@ impl pallet_treasury::Config for Runtime {
 	type Paymaster = PayFromAccount<Balances, TreasuryAccount>;
 	type BalanceConverter = MulBy<ConstU128<1>>;
 	type PayoutPeriod = SpendPayoutPeriod;
+	type BenchmarkHelper = ();
 }
 
 
@@ -1239,6 +1240,7 @@ mod benches {
 		[pallet_sudo, Sudo]
 		[pallet_collator_selection, CollatorSelection]
 		[cumulus_pallet_xcmp_queue, XcmpQueue]
+		[pallet_confidential_docs, ConfidentialDocs]
 	);
 }
 

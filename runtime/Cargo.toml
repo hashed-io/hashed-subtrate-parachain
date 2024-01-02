@@ -29,8 +29,8 @@ pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", t
 # pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features = false }
 pallet-gated-marketplace = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-rbac = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-pallet-confidential-docs = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-# pallet-confidential-docs = { path = "../../hashed-pallets/pallets/confidential-docs", default-features = false }
+# pallet-confidential-docs = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
+pallet-confidential-docs = { path = "../../hashed-pallets/pallets/confidential-docs", default-features = false }
 pallet-afloat = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-mapped-assets = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-fund-admin-records = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
@@ -234,6 +234,8 @@ runtime-benchmarks = [
 	"sp-runtime/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
+	#Local Pallets
+	"pallet-confidential-docs/runtime-benchmarks",
 ]
 
 try-runtime = [
