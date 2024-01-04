@@ -18,7 +18,7 @@ spec:
       containers:
       - name: md5-collator-1
         imagePullPolicy: IfNotPresent
-        image: sebastianmontero/hashed-substrate-collator-md5:fad9867734381df739458102212fc2a118752c68
+        image: sebastianmontero/hashed-substrate-collator-md5:e3cbb15367469502193220e4070d063a3d45b4c4
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
         args: ["md5", "/var/www/hashed/hashed"]
         volumeMounts:
@@ -31,6 +31,10 @@ spec:
             value: "/dns/c1.md5.p2p.hashed.live/tcp/443/wss"
           - name: RELAY_PRUNING
             value: "1000"
+          - name: RPC_MAX_CONNECTIONS
+            value: "500"
+          - name: RPC_METHODS
+            value: "unsafe"
           # - name: RUST_LOG
           #   value: "debug"
           # - name: RUST_LOG
@@ -47,8 +51,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "7.5G"
-            cpu: "3.5"
+            memory: "15G"
+            cpu: "7.5"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:

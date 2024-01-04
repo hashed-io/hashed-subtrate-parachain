@@ -37,7 +37,6 @@ collator_args=(
     --rpc-port 9946
     --rpc-external
     --rpc-cors all
-    --rpc-methods unsafe
     --chain $RESOURCES_PATH/$1-collator-raw-spec.json
 )
 if [[ ! -z ${NODEKEY} ]]; then
@@ -74,7 +73,6 @@ relay_args=(
     --rpc-port 9944
     --rpc-external
     --rpc-cors all
-    --rpc-methods unsafe
     --wasm-execution Compiled
 )
 
@@ -83,6 +81,27 @@ if [[ ! -z ${RELAY_PRUNING} ]]; then
 else
     relay_args+=(--pruning 10000)
 fi
+
+if [[ ! -z ${RPC_MAX_CONNECTIONS} ]]; then
+    collator_args+=(--rpc-max-connections ${RPC_MAX_CONNECTIONS})
+    relay_args+=(--rpc-max-connections ${RPC_MAX_CONNECTIONS})
+fi
+
+if [[ ! -z ${RPC_MAX_REQUEST_SIZE} ]]; then
+    collator_args+=(--rpc-max-request-size ${RPC_MAX_REQUEST_SIZE})
+    relay_args+=(--rpc-max-request-size ${RPC_MAX_REQUEST_SIZE})
+fi
+
+if [[ ! -z ${RPC_MAX_RESPONSE_SIZE} ]]; then
+    collator_args+=(--rpc-max-response-size ${RPC_MAX_RESPONSE_SIZE})
+    relay_args+=(--rpc-max-response-size ${RPC_MAX_RESPONSE_SIZE})
+fi
+
+if [[ ! -z ${RPC_METHODS} ]]; then
+    collator_args+=(--rpc-methods ${RPC_METHODS})
+    relay_args+=(--rpc-methods ${RPC_METHODS})
+fi
+
 
 # collator_args+=($chain_spec)
 
