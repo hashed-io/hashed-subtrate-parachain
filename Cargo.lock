@@ -4203,7 +4203,6 @@ dependencies = [
  "pallet-collator-selection",
  "pallet-collective",
  "pallet-confidential-docs",
- "pallet-conviction-voting",
  "pallet-democracy",
  "pallet-elections-phragmen",
  "pallet-fruniques",
@@ -6464,6 +6463,7 @@ name = "pallet-alliance"
 version = "4.0.0-dev"
 source = "git+https://github.com/paritytech/polkadot-sdk?tag=v1.3.0-rc1#7c9fd83805cc446983a7698c7a3281677cf655c8"
 dependencies = [
+ "array-bytes 6.2.0",
  "frame-benchmarking",
  "frame-support",
  "frame-system",
