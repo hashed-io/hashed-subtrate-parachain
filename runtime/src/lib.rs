@@ -1040,6 +1040,7 @@ impl pallet_confidential_docs::Config for Runtime {
 	type GroupNameMinLen = GroupNameMinLen;
 	type GroupNameMaxLen = GroupNameMaxLen;
 	type MaxMemberGroups = MaxMemberGroups;
+	type WeightInfo = pallet_confidential_docs::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
