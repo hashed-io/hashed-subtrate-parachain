@@ -9,11 +9,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - c1.arch.md5.hashed.live
-    - c1.arch.md5.p2p.hashed.live
+    - c1.md5.hashed.live
+    - c1.md5.p2p.hashed.live
     secretName: md5-collator-archive-1
   rules:
-  - host: c1.arch.md5.hashed.live
+  - host: c1.md5.hashed.live
     http:
       paths:
       - pathType: Prefix
@@ -51,7 +51,7 @@ spec:
             name: md5-collator-archive-1
             port:
               number: 9933
-  - host: c1.arch.md5.p2p.hashed.live
+  - host: c1.md5.p2p.hashed.live
     http:
       paths:
       - pathType: Prefix
