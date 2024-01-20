@@ -1,0 +1,23 @@
+[package]
+name = "xcm-primitives"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+sp-std = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+frame-support = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+sp-runtime = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+
+
+xcm = { package = "staging-xcm", default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+xcm-executor = { package = "staging-xcm-executor", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+
+[features]
+default = [ "std" ]
+std = [
+    "sp-std/std",
+    "frame-support/std",
+    "sp-runtime/std",
+    "xcm/std",
+    "xcm-executor/std"
+]

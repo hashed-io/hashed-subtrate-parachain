@@ -1,0 +1,76 @@
+[package]
+name = "pallet-asset-registry"
+version = "0.0.1"
+description = "Pallet for XCM Asset Registry."
+authors = ["Trappist Network <https://github.com/TrappistNetwork>"]
+homepage = "https://trappist.io"
+repository = "https://github.com/TrappistNetwork/trappist"
+edition = "2021"
+license = "Apache License v2"
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "3.6.1", default-features = false }
+scale-info = { version = "2.5.0", default-features = false, features = [
+	"derive",
+] }
+sp-runtime = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+sp-std = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+frame-benchmarking = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false, optional = true }
+frame-support = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+frame-system = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+
+xcm = { package = "staging-xcm", default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+
+xcm-primitives = { path = "../../primitives/xcm", default-features = false }
+
+[dev-dependencies]
+sp-core = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+sp-io = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+sp-runtime = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1" }
+pallet-assets = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+pallet-balances = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+
+xcm = { package = "staging-xcm", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+xcm-builder = { package = "staging-xcm-builder", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+xcm-executor = { package = "staging-xcm-executor", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+xcm-simulator = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+pallet-xcm = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+polkadot-core-primitives = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+polkadot-runtime-parachains = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+polkadot-parachain-primitives = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+
+parachain-info = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+parachains-common = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+cumulus-pallet-dmp-queue = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+cumulus-pallet-xcmp-queue = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+cumulus-primitives-core = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+
+[features]
+default = ["std"]
+std = [
+	"codec/std",
+	"sp-runtime/std",
+	"sp-std/std",
+	"frame-benchmarking?/std",
+	"frame-support/std",
+	"frame-system/std",
+	"scale-info/std",
+	"xcm-primitives/std",
+	"xcm/std",
+	"xcm-executor/std",
+	"xcm-builder/std",
+	"pallet-xcm/std",
+	"polkadot-core-primitives/std",
+	"polkadot-runtime-parachains/std",
+	"polkadot-parachain-primitives/std",
+	"parachain-info/std",
+	"parachains-common/std",
+	"cumulus-pallet-dmp-queue/std",
+	"cumulus-pallet-xcmp-queue/std",
+	"cumulus-primitives-core/std",
+]
+runtime-benchmarks = ["frame-benchmarking/runtime-benchmarks"]
+try-runtime = ["frame-support/try-runtime"]

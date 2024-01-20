@@ -626,6 +626,34 @@ impl pallet_assets::Config for Runtime {
 	type CallbackHandle = ();
 }
 
+#[cfg(feature = "runtime-benchmarks")]
+pub struct AssetRegistryBenchmarkHelper;
+#[cfg(feature = "runtime-benchmarks")]
+impl pallet_asset_registry::BenchmarkHelper<AssetIdForTrustBackedAssets>
+	for AssetRegistryBenchmarkHelper
+{
+	fn get_registered_asset() -> AssetIdForTrustBackedAssets {
+		use sp_runtime::traits::StaticLookup;
+
+		let root = frame_system::RawOrigin::Root.into();
+		let asset_id = 1;
+		let caller = frame_benchmarking::whitelisted_caller();
+		let caller_lookup = <Runtime as frame_system::Config>::Lookup::unlookup(caller);
+		Assets::force_create(root, asset_id.into(), caller_lookup, true, 1)
+			.expect("Should have been able to force create asset");
+		asset_id
+	}
+}
+
+impl pallet_asset_registry::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type ReserveAssetModifierOrigin = RootOrThreeFifthsOfCouncil;
+	type Assets = Assets;
+	type WeightInfo = pallet_asset_registry::weights::SubstrateWeight<Runtime>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = AssetRegistryBenchmarkHelper;
+}
+
 
 parameter_types! {
 	pub CouncilMotionDuration: BlockNumber = 3 * DAYS;
@@ -1199,6 +1227,7 @@ construct_runtime!(
 		ChildBounties: pallet_child_bounties::{Pallet, Call, Storage, Event<T>} = 63,
 		Assets: pallet_assets::{Pallet, Call, Storage, Event<T>} = 64,
 		Uniques: pallet_uniques::{Pallet, Call, Storage, Event<T>}  = 65,
+		AssetRegistry: pallet_asset_registry = 66,
 		// AssetTxPayment: pallet_asset_tx_payment::{Pallet, Call, Storage, Event<T>} = 16,
 
 		// Governance Related
@@ -1238,7 +1267,8 @@ mod benches {
 		[pallet_timestamp, Timestamp]
 		[pallet_sudo, Sudo]
 		[pallet_collator_selection, CollatorSelection]
-		[cumulus_pallet_xcmp_queue, XcmpQueue]
+		[cumulus_pallet_xcmp_queue, XcmpQueue],
+		[pallet_asset_registry, AssetRegistry]
 	);
 }
 
