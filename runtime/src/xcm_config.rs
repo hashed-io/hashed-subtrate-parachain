@@ -1,34 +1,41 @@
 use super::{
-	AccountId, AllPalletsWithSystem, Balances, ParachainInfo, ParachainSystem, PolkadotXcm,
+	AccountId, AllPalletsWithSystem, Assets, AssetRegistry, Balances, ParachainInfo, ParachainSystem, PolkadotXcm,
 	Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, WeightToFee, XcmpQueue,
 };
 use frame_support::{
 	match_types, parameter_types,
-	traits::{ConstU32, Everything, Nothing},
+	traits::{ContainsPair, ConstU32, Everything, Get, Nothing, PalletInfoAccess},
 	weights::Weight,
 };
+use sp_std::{marker::PhantomData};
 use frame_system::EnsureRoot;
 use pallet_xcm::XcmPassthrough;
+use parachains_common::AssetIdForTrustBackedAssets;
 use polkadot_parachain_primitives::primitives::Sibling;
 use polkadot_runtime_common::impls::ToAuthor;
 use xcm::latest::prelude::*;
 use xcm_builder::{
-	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowTopLevelPaidExecutionFrom,
+	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowKnownQueryResponses, AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom,
 	CurrencyAdapter, DenyReserveTransferToRelayChain, DenyThenTry, EnsureXcmOrigin,
-	FixedWeightBounds, IsConcrete, NativeAsset, NoChecking, ParentIsPreset, RelayChainAsNative,
+	FixedWeightBounds, FixedRateOfFungible, FungiblesAdapter, IsConcrete, NativeAsset, NoChecking, ParentIsPreset, RelayChainAsNative,
 	SiblingParachainAsNative, SiblingParachainConvertsVia, SignedAccountId32AsNative,
 	SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit, TrailingSetTopicAsId,
 	UsingComponents, WithComputedOrigin, WithUniqueTopic,
 };
-use xcm_executor::XcmExecutor;
-use xcm_primitives::{AssetMultiLocationGetter, ConvertedRegisteredAssetId};
+use xcm_executor::{traits::JustTry, XcmExecutor};
+use xcm_primitives::{AsAssetMultiLocation, ConvertedRegisteredAssetId};
+use crate::constants::{Balance, fee::default_fee_per_second};
+
+// Parameters that differ between chains
+parameter_types! {
+	pub const RelayNetwork: NetworkId = NetworkId::Rococo;
+}
 
 
 parameter_types! {
 	pub const RelayLocation: MultiLocation = MultiLocation::parent();
-	pub const RelayNetwork: Option<NetworkId> = None;
 	pub RelayChainOrigin: RuntimeOrigin = cumulus_pallet_xcm::Origin::Relay.into();
-	pub UniversalLocation: InteriorMultiLocation = Parachain(ParachainInfo::parachain_id().into()).into();
+	pub UniversalLocation: InteriorMultiLocation = (GlobalConsensus(RelayNetwork::get()), Parachain(ParachainInfo::parachain_id().into())).into();
 	pub SelfReserve: MultiLocation = MultiLocation::here();
 	pub PlaceholderAccount: AccountId = PolkadotXcm::check_account();
 	pub AssetsPalletLocation: MultiLocation =
@@ -38,6 +45,7 @@ parameter_types! {
 	// AssetHub's Assets pallet index
 	pub AssetHubAssetsPalletLocation: MultiLocation =
 		MultiLocation::new(1, X2(Parachain(1000), PalletInstance(50)));
+	pub RelayTokenPerSecond: (xcm::v3::AssetId, u128,u128) = (MultiLocation::new(1,Here).into(), default_fee_per_second() * 70, 0u128);
 }
 
 /// Type for specifying how a `MultiLocation` can be converted into an `AccountId`. This is used
@@ -149,16 +157,29 @@ match_types! {
 	};
 }
 
+match_types! {
+	pub type ParentOrSiblings: impl Contains<MultiLocation> = {
+		MultiLocation { parents: 1, interior: Here } |
+		MultiLocation { parents: 1, interior: X1(_) }
+	};
+}
+
 pub type Barrier = TrailingSetTopicAsId<
 	DenyThenTry<
 		DenyReserveTransferToRelayChain,
 		(
 			TakeWeightCredit,
+			// Expected responses are OK.
+			AllowKnownQueryResponses<PolkadotXcm>,
 			WithComputedOrigin<
 				(
+					// If the message is one that immediately attemps to pay for execution, then
+					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
+					// Parent and its exec plurality get free execution
 					AllowExplicitUnpaidExecutionFrom<ParentOrParentsExecutivePlurality>,
-					// ^^^ Parent and its exec plurality get free execution
+					// Subscriptions for version tracking are OK.
+					AllowSubscriptionsFrom<ParentOrSiblings>,
 				),
 				UniversalLocation,
 				ConstU32<8>,
@@ -178,6 +199,12 @@ impl<T: Get<MultiLocation>> ContainsPair<MultiAsset, MultiLocation> for ReserveA
 
 pub type Reserves = (NativeAsset, ReserveAssetsFrom<AssetHubLocation>);
 
+pub type Traders = (
+	// RelayToken
+	FixedRateOfFungible<RelayTokenPerSecond, ()>,
+	// Everything else
+	UsingComponents<WeightToFee, SelfReserve, AccountId, Balances, ToAuthor<Runtime>>,
+);
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
@@ -190,8 +217,7 @@ impl xcm_executor::Config for XcmConfig {
 	type UniversalLocation = UniversalLocation;
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
-	type Trader =
-		UsingComponents<WeightToFee, RelayLocation, AccountId, Balances, ToAuthor<Runtime>>;
+	type Trader = Traders;
 	type ResponseHandler = PolkadotXcm;
 	type AssetTrap = PolkadotXcm;
 	type AssetClaims = PolkadotXcm;
@@ -215,7 +241,7 @@ pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, R
 /// queues.
 pub type XcmRouter = WithUniqueTopic<(
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, (), ()>,
+	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm, ()>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 )>;
@@ -230,12 +256,12 @@ impl pallet_xcm::Config for Runtime {
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
 	type ExecuteXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
-	type XcmExecuteFilter = Nothing;
+	type XcmExecuteFilter = Everything;
 	// ^ Disable dispatchable execute on the XCM pallet.
 	// Needs to be `Everything` for local testing.
 	type XcmExecutor = XcmExecutor<XcmConfig>;
-	type XcmTeleportFilter = Everything;
-	type XcmReserveTransferFilter = Nothing;
+	type XcmTeleportFilter = Nothing;
+	type XcmReserveTransferFilter = Everything;
 	type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
 	type UniversalLocation = UniversalLocation;
 	type RuntimeOrigin = RuntimeOrigin;

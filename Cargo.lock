@@ -4266,6 +4266,7 @@ dependencies = [
  "pallet-whitelist",
  "pallet-xcm",
  "parachain-info",
+ "parachains-common",
  "parity-scale-codec",
  "polkadot-parachain-primitives",
  "polkadot-runtime-common",
@@ -6511,6 +6512,7 @@ name = "pallet-asset-conversion"
 version = "4.0.0-dev"
 source = "git+https://github.com/paritytech/polkadot-sdk?tag=v1.3.0-rc1#7c9fd83805cc446983a7698c7a3281677cf655c8"
 dependencies = [
+ "frame-benchmarking",
  "frame-support",
  "frame-system",
  "parity-scale-codec",

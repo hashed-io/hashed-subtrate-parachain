@@ -64,6 +64,7 @@ use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 // XCM Imports
 use xcm::latest::prelude::BodyId;
 use xcm_executor::XcmExecutor;
+use constants::{Balance,BlockNumber, Moment};
 
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
@@ -73,8 +74,6 @@ pub type Signature = MultiSignature;
 /// to the public key of our transaction signing scheme.
 pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
 
-/// Balance of an account.
-pub type Balance = u128;
 
 /// Index of a transaction in the chain.
 pub type Nonce = u32;
@@ -86,9 +85,6 @@ pub type Index = u32;
 
 /// A hash of some data used by the chain.
 pub type Hash = sp_core::H256;
-
-/// An index to a block.
-pub type BlockNumber = u32;
 
 /// The address format for describing accounts.
 pub type Address = MultiAddress<AccountId, ()>;
@@ -345,7 +341,7 @@ impl frame_system::Config for Runtime {
 
 impl pallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
-	type Moment = u64;
+	type Moment = Moment;
 	type OnTimestampSet = Aura;
 	type MinimumPeriod = ConstU64<{ SLOT_DURATION / 2 }>;
 	type WeightInfo = ();
@@ -430,7 +426,7 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 	type ChannelInfo = ParachainSystem;
-	type VersionWrapper = ();
+	type VersionWrapper = PolkadotXcm;
 	type ExecuteOverweightOrigin = EnsureRoot<AccountId>;
 	type ControllerOrigin = EnsureRoot<AccountId>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
@@ -1130,7 +1126,7 @@ impl pallet_gated_marketplace::Config for Runtime {
   type MaxOffersPerMarket = MaxOffersPerMarket;
   type MaxMarketsPerItem = MaxMarketsPerItem;
   type Timestamp = Timestamp;
-  type Moment = u64;
+  type Moment = Moment;
   //type LocalCurrency = Balances;
   type Rbac = RBAC;
 }
@@ -1152,7 +1148,7 @@ impl pallet_fund_admin_records::Config for Runtime {
   type RuntimeEvent = RuntimeEvent;
   type RemoveOrigin = RootOrThreeFifthsOfCouncil;
   type Timestamp = Timestamp;
-  type Moment = u64;
+  type Moment = Moment;
   type MaxRecordsAtTime = MaxRecordsAtTime;
 }
 

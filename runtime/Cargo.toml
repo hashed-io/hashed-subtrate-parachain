@@ -119,6 +119,7 @@ cumulus-primitives-timestamp =  { git = "https://github.com/paritytech/polkadot-
 cumulus-primitives-utility =  { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 pallet-collator-selection =  { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 parachain-info = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+parachains-common = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 
 [features]
 default = [
@@ -126,6 +127,7 @@ default = [
 	"hex-literal"
 ]
 std = [
+	"assets-common/std",
 	"codec/std",
 	"cumulus-pallet-aura-ext/std",
 	"cumulus-pallet-dmp-queue/std",
@@ -195,6 +197,7 @@ std = [
 	"pallet-timestamp/std",
 	"pallet-xcm/std",
 	"parachain-info/std",
+	"parachains-common/std",
 	"polkadot-parachain-primitives/std",
 	"polkadot-runtime-common/std",
 	"scale-info/std",
