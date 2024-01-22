@@ -193,10 +193,8 @@ impl_opaque_keys! {
 
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("luhn"), //for the mainnetwork it can not be changed
-	impl_name: create_runtime_str!("luhn"),
-	// spec_name: create_runtime_str!("hashed"), // for md5 rococo
-	// impl_name: create_runtime_str!("hashed"),
+	spec_name: create_runtime_str!("hashed"), // for md5 rococo
+	impl_name: create_runtime_str!("hashed"),
 	authoring_version: 4,
 	spec_version: 4,
 	impl_version: 4,
@@ -286,7 +284,7 @@ parameter_types! {
 		})
 		.avg_block_initialization(AVERAGE_ON_INITIALIZE_RATIO)
 		.build_or_panic();
-	pub const SS58Prefix: u16 = 9072;
+	pub const SS58Prefix: u16 = 5000;
 }
 
 // Configure FRAME pallets to include in runtime.
