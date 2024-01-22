@@ -7,6 +7,7 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 pub mod constants;
+
 mod weights;
 pub mod xcm_config;
 mod migrations;
@@ -64,7 +65,6 @@ use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 // XCM Imports
 use xcm::latest::prelude::BodyId;
 use xcm_executor::XcmExecutor;
-use constants::{Balance,BlockNumber, Moment};
 
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
