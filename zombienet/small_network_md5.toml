@@ -24,7 +24,7 @@ chain_spec_path = "/home/sebastian/vsc-workspace/hashed-substrate-parachain/reso
   name = "charlie"
   validator = true
 #   image = "sebastianmontero/hashed-substrate-collator:latest"
-  command = "../target/release/hashed-parachain"
+  command = "./target/release/hashed-parachain"
   args = ["-lparachain=debug"]
 #   args = ["--force-authoring"]
 #   args = ["--chain", "/var/www/hashed-substrate/md5-collator-raw-spec.json", "--force-authoring"]
