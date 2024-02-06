@@ -196,11 +196,11 @@ impl_opaque_keys! {
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("hashed"), // for md5 rococo
 	impl_name: create_runtime_str!("hashed"),
-	authoring_version: 5,
-	spec_version: 5,
-	impl_version: 5,
+	authoring_version: 6,
+	spec_version: 6,
+	impl_version: 6,
 	apis: RUNTIME_API_VERSIONS,
-	transaction_version: 5,
+	transaction_version: 6,
 	state_version: 1,
 };
 
