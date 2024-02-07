@@ -1,36 +1,40 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: md5-collator-2
+  name: md5-collator-archive-1
   namespace: hashed-network
 spec:
   replicas: 1
-  serviceName: md5-collator-2-headless
+  serviceName: md5-collator-archive-1-headless
   selector:
     matchLabels:
-      app: md5-collator-2
+      app: md5-collator-archive-1
   template:
     metadata:
       namespace: hashed-network
       labels:
-        app: md5-collator-2
+        app: md5-collator-archive-1
     spec:
       containers:
-      - name: md5-collator-2
+      - name: md5-collator-archive-1
         imagePullPolicy: IfNotPresent
         image: sebastianmontero/hashed-substrate-collator-md5:e3cbb15367469502193220e4070d063a3d45b4c4
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
         args: ["md5", "/var/www/hashed/hashed"]
         volumeMounts:
-          - name: md5-collator-2-pvc
+          - name: md5-collator-archive-1-pvc
             mountPath:  /var/www/hashed/hashed
         env:
-          - name: BOOTNODES
-            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWR6PbHDxdAK7pX9bPosWT3heVmqH1YZt4kppUKVztQcQX"
+          # - name: BOOTNODES
+          #   value: "/dns/md5-collator-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWD25baFFRAxHukWWRBZPWpb3RVNbEcXDbDvLipMnNb7C2"
           - name: LISTEN_ADDR
             value: "/ip4/0.0.0.0/tcp/40333/ws"
           - name: PUBLIC_ADDR
-            value: "/dns/c2md5.p2p.hashed.live/tcp/443/wss"
+            value: "/dns/c1md5.p2p.hashed.live/tcp/443/wss"
+          - name: STATE_PRUNING
+            value: "archive"
+          - name: BLOCKS_PRUNING
+            value: "archive"
           - name: RELAY_PRUNING
             value: "1000"
           - name: RPC_MAX_CONNECTIONS
@@ -38,21 +42,23 @@ spec:
           - name: RPC_METHODS
             value: "unsafe"
           # - name: RUST_LOG
-          #   value: "parachain=debug"
+          #   value: "debug"
           # - name: RUST_LOG
-          #   value: "sub-libp2p=trace"
+          #   value: "sub-libp2p=trace"-lparachain=debug
+          # - name: RUST_LOG
+          #   value: "lparachain=debug"
           # - name: RUST_LOG
           #   value: "db=trace,sync=trace,sub-libp2p=trace"
           # - name: NODEKEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: md5-collator-2-secrets
+          #       name: md5-collator-archive-1-secrets
           #       key: NODEKEY
           #       optional: false
         resources:
           limits:
-            memory: "10G"
-            cpu: "3"
+            memory: "15G"
+            cpu: "7.5"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -62,27 +68,27 @@ spec:
         - containerPort: 30333
         - containerPort: 40333
       nodeSelector:
-        node.kubernetes.io/instance-type: t3.xlarge
+        node.kubernetes.io/instance-type: c6id.2xlarge
   volumeClaimTemplates:
   - metadata:
-      name: md5-collator-2-pvc
+      name: md5-collator-archive-1-pvc
       namespace: hashed-network
     spec:
       accessModes:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 400Gi
+          storage: 1Ti
       storageClassName: gp2
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name:  md5-collator-2
+  name:  md5-collator-archive-1
   namespace: hashed-network
 spec:
   selector:
-    app:  md5-collator-2
+    app:  md5-collator-archive-1
   type:  ClusterIP
   ports:
   - name:  collator-p2p-port
