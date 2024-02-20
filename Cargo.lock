@@ -6438,7 +6438,6 @@ dependencies = [
 [[package]]
 name = "pallet-afloat"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6699,7 +6698,6 @@ dependencies = [
 [[package]]
 name = "pallet-bitcoin-vaults"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6914,7 +6912,6 @@ dependencies = [
 [[package]]
 name = "pallet-fruniques"
 version = "0.1.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6932,7 +6929,6 @@ dependencies = [
 [[package]]
 name = "pallet-fund-admin-records"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -6948,7 +6944,6 @@ dependencies = [
 [[package]]
 name = "pallet-gated-marketplace"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7074,7 +7069,6 @@ dependencies = [
 [[package]]
 name = "pallet-mapped-assets"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -7319,7 +7313,6 @@ dependencies = [
 [[package]]
 name = "pallet-rbac"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",

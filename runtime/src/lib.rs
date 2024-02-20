@@ -970,13 +970,17 @@ impl frame_system::offchain::SigningTypes for Runtime {
 }
 
 parameter_types! {
-  pub const MaxScopesPerPallet: u32 = 1000;
+  // pub const MaxScopesPerPallet: u32 = 1000;
+	// For benchmark
+	pub const MaxScopesPerPallet: u32 = 200;
   pub const MaxRolesPerPallet: u32 = 50;
   pub const RoleMaxLen: u32 = 50;
   pub const PermissionMaxLen: u32 = 50;
   pub const MaxPermissionsPerRole: u32 = 100;
   pub const MaxRolesPerUser: u32 = 10;
-  pub const MaxUsersPerRole: u32 = 2500;
+  // pub const MaxUsersPerRole: u32 = 2500;
+	// For benchmark
+	pub const MaxUsersPerRole: u32 = 500;
 }
 
 impl pallet_rbac::Config for Runtime {
@@ -989,6 +993,7 @@ impl pallet_rbac::Config for Runtime {
   type MaxPermissionsPerRole = MaxPermissionsPerRole;
   type MaxRolesPerUser = MaxRolesPerUser;
   type MaxUsersPerRole = MaxUsersPerRole;
+  type WeightInfo = pallet_rbac::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1012,6 +1017,7 @@ impl pallet_bitcoin_vaults::Config for Runtime {
 	type VaultDescriptionMaxLen = VaultDescriptionMaxLen;
 	type OutputDescriptorMaxLen = OutputDescriptorMaxLen;
 	type MaxProposalsPerVault = MaxProposalsPerVault;
+	type WeightInfo = pallet_bitcoin_vaults::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1247,6 +1253,8 @@ mod benches {
 		[pallet_collator_selection, CollatorSelection]
 		[cumulus_pallet_xcmp_queue, XcmpQueue]
 		[pallet_confidential_docs, ConfidentialDocs]
+		[pallet_bitcoin_vaults, BitcoinVaults]
+		[pallet_rbac, RBAC]
 	);
 }
 
