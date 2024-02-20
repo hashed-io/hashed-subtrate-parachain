@@ -1,0 +1,45 @@
+# HOW TO RUN: zombienet-linux-x64 spawn --provider native small_network.toml
+[relaychain]
+# default_image = "parity/polkadot:latest"
+# default_command = "polkadot"
+chain = "rococo-local"
+
+# [relaychain.genesis.runtime.configuration.config]
+# scheduling_lookahead = 2
+
+# [relaychain.genesis.runtime.configuration.config.async_backing_params]
+# max_candidate_depth = 3
+# allowed_ancestry_len = 2
+
+# [relaychain.genesis.runtimeGenesis.patch.configuration.config]
+# scheduling_lookahead = 2
+
+# [relaychain.genesis.runtimeGenesis.patch.configuration.config.async_backing_params]
+# max_candidate_depth = 3
+# allowed_ancestry_len = 2
+
+  [[relaychain.nodes]]
+  name = "alice"
+  validator = true
+
+  [[relaychain.nodes]]
+  name = "bob"
+  validator = true
+
+[[parachains]]
+id = 2000
+cumulus_based = true
+chain = "dev"
+# genesis_wasm_path = "/home/sebastian/vsc-workspace/hashed-substrate/resources/md5-wasm"
+# chain_spec_path = "/home/sebastian/vsc-workspace/hashed-substrate-parachain/resources/md5-collator-raw-spec.json"
+
+  # run charlie as parachain collator
+  [[parachains.collators]]
+  name = "charlie"
+  validator = true
+#   image = "sebastianmontero/hashed-substrate-collator:latest"
+  command = "./target/release/hashed-parachain"
+  args = ["-lparachain=debug"]
+#   args = ["--force-authoring"]
+#   args = ["--chain", "/var/www/hashed-substrate/md5-collator-raw-spec.json", "--force-authoring"]
+#   args = ["--chain", "/var/www/hashed-substrate/md5-collator-raw-spec.json"]
