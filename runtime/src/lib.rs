@@ -970,17 +970,17 @@ impl frame_system::offchain::SigningTypes for Runtime {
 }
 
 parameter_types! {
-//   pub const MaxScopesPerPallet: u32 = 1000;
+  pub const MaxScopesPerPallet: u32 = 1000;
 	// For benchmark
-	pub const MaxScopesPerPallet: u32 = 1;
+	// pub const MaxScopesPerPallet: u32 = 100;
   pub const MaxRolesPerPallet: u32 = 50;
   pub const RoleMaxLen: u32 = 50;
   pub const PermissionMaxLen: u32 = 50;
   pub const MaxPermissionsPerRole: u32 = 100;
   pub const MaxRolesPerUser: u32 = 10;
-//   pub const MaxUsersPerRole: u32 = 2500;
+  pub const MaxUsersPerRole: u32 = 2500;
 	// For benchmark
-	pub const MaxUsersPerRole: u32 = 1;
+	// pub const MaxUsersPerRole: u32 = 500;
 }
 
 impl pallet_rbac::Config for Runtime {
