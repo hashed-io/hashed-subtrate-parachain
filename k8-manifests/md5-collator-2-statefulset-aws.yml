@@ -51,7 +51,7 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "10G"
+            memory: "4G"
             cpu: "3"
           # requests:
           #   ephemeral-storage: 25Gi
@@ -62,7 +62,7 @@ spec:
         - containerPort: 30333
         - containerPort: 40333
       nodeSelector:
-        node.kubernetes.io/instance-type: t3.xlarge
+        node.kubernetes.io/instance-type: c6id.2xlarge
   volumeClaimTemplates:
   - metadata:
       name: md5-collator-2-pvc
