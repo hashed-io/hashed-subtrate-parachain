@@ -111,7 +111,7 @@ fn set_default_ss58_version(spec: &Box<dyn sc_service::ChainSpec>) {
 	} else if spec.is_md5(){
 		5000
 	} else {
-		42
+		5000
 	};
 
 	sp_core::crypto::set_default_ss58_version(ss58_version.into());
