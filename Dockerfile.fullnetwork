@@ -1,0 +1,20 @@
+FROM paritytech/ci-linux:1.71.0-bullseye
+
+WORKDIR /var/hashed-parachain
+RUN apt-get update
+RUN apt-get -y install curl
+RUN curl -L -o /usr/local/bin/polkadot https://github.com/paritytech/polkadot-sdk/releases/download/polkadot-v1.8.0/polkadot
+RUN curl -L -o /usr/local/bin/polkadot-prepare-worker https://github.com/paritytech/polkadot-sdk/releases/download/polkadot-v1.8.0/polkadot-prepare-worker
+RUN curl -L -o /usr/local/bin/polkadot-execute-worker https://github.com/paritytech/polkadot-sdk/releases/download/polkadot-v1.8.0/polkadot-execute-worker
+RUN chmod u+x /usr/local/bin/polkadot
+RUN chmod u+x /usr/local/bin/polkadot-prepare-worker
+RUN chmod u+x /usr/local/bin/polkadot-execute-worker
+RUN curl -L -o /usr/local/bin/zombienet-linux-x64 https://github.com/paritytech/zombienet/releases/download/v1.3.93/zombienet-linux-x64
+RUN chmod u+x /usr/local/bin/zombienet-linux-x64
+
+# COPY ./target/release/ ./release
+# COPY ./zombienet/small_network_current_dev_for_docker_image.toml .
+COPY . .
+RUN ./build_md5.sh --release
+
+CMD [ "zombienet-linux-x64", "spawn", "--provider", "native", "/var/hashed-parachain/zombienet/small_network_current_dev_for_docker_image.toml" ]
