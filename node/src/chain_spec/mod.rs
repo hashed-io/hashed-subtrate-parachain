@@ -214,7 +214,7 @@ fn testnet_genesis(
 				..Default::default()
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k| (k, 1 << 60)).collect(),
+			balances: endowed_accounts.iter().cloned().map(|k| (k, 1000000000000000000000000000)).collect(),
 		},
 		transaction_payment: Default::default(),
 		sudo: SudoConfig { key: Some(root_key) },
