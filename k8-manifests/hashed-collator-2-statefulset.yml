@@ -48,8 +48,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "12G"
-            cpu: "3.5"
+            memory: "8G"
+            cpu: "2"
         ports:
         - containerPort: 9933
         - containerPort: 9944
