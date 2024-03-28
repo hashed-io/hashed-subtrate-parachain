@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: md5-collator-2
+  namespace: hashed-network
+spec:
+  replicas: 1
+  serviceName: md5-collator-2-headless
+  selector:
+    matchLabels:
+      app: md5-collator-2
+  template:
+    metadata:
+      namespace: hashed-network
+      labels:
+        app: md5-collator-2
+    spec:
+      containers:
+      - name: md5-collator-2
+        imagePullPolicy: IfNotPresent
+        image: sebastianmontero/hashed-substrate-collator-md5:5ced0a249cff4c2c3d228979c6af4b2a7547edf0
+        command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
+        args: ["md5", "/var/www/hashed/hashed"]
+        volumeMounts:
+          - name: md5-collator-2-pvc
+            mountPath:  /var/www/hashed/hashed
+        env:
+          - name: BOOTNODES
+            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWDrgSpA8CQqCEdC9Yr1Q9p9WbUkb6m2VuuGtNHRtpZAo5"
+          - name: LISTEN_ADDR
+            value: "/ip4/0.0.0.0/tcp/40333/ws"
+          - name: PUBLIC_ADDR
+            value: "/dns/c2md5.p2p.hashed.network/tcp/443/wss"
+          - name: RELAY_PRUNING
+            value: "1000"
+          - name: RPC_MAX_CONNECTIONS
+            value: "500"
+          - name: RPC_METHODS
+            value: "unsafe"
+          # - name: RUST_LOG
+          #   value: "parachain=debug"
+          # - name: RUST_LOG
+          #   value: "sub-libp2p=trace"
+          # - name: RUST_LOG
+          #   value: "db=trace,sync=trace,sub-libp2p=trace"
+          # - name: NODEKEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: md5-collator-2-secrets
+          #       key: NODEKEY
+          #       optional: false
+        resources:
+          limits:
+            memory: "6G"
+            cpu: "2"
+          # requests:
+          #   ephemeral-storage: 25Gi
+        ports:
+        - containerPort: 9933
+        - containerPort: 9944
+        - containerPort: 9946
+        - containerPort: 30333
+        - containerPort: 40333
+      # nodeSelector:
+      #   node.kubernetes.io/instance-type: c6id.2xlarge
+  volumeClaimTemplates:
+  - metadata:
+      name: md5-collator-2-pvc
+      namespace: hashed-network
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 400Gi
+      storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  md5-collator-2
+  namespace: hashed-network
+spec:
+  selector:
+    app:  md5-collator-2
+  type:  ClusterIP
+  ports:
+  - name:  collator-p2p-port
+    port:  40333
+    targetPort:  40333
+  - name:  collator-ws-port
+    port:  9946
+    targetPort:  9946
+  - name:  relay-p2p-port
+    port:  30333
+    targetPort:  30333
+  - name:  relay-ws-port
+    port:  9944
+    targetPort:  9944
+  - name:  rpc-port
+    port:  9933
+    targetPort:  9933
