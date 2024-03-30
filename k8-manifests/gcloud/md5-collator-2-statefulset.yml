@@ -51,8 +51,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "6G"
-            cpu: "2"
+            memory: "12G"
+            cpu: "3.5"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
