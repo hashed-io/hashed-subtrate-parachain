@@ -40,6 +40,8 @@ pallet-afloat = { path = "../../hashed-pallets/pallets/afloat", default-features
 pallet-mapped-assets = { path = "../../hashed-pallets/pallets/mapped-assets", default-features = false }
 # pallet-fund-admin-records = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-fund-admin-records = { path = "../../hashed-pallets/pallets/fund-admin-records", default-features = false }
+# pallet-fund-admin = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
+pallet-fund-admin = { path = "../../hashed-pallets/pallets/fund-admin", default-features = false }
 
 # Prebuilt Pallets
 pallet-alliance = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
@@ -156,6 +158,7 @@ std = [
 	"pallet-fund-admin-records/std",
 	"pallet-mapped-assets/std",
 	"pallet-afloat/std",
+	"pallet-fund-admin/std",
 	# Prebuilt Pallets
 	"pallet-alliance/std",
 	"pallet-assets/std",
@@ -244,6 +247,7 @@ runtime-benchmarks = [
 	"pallet-confidential-docs/runtime-benchmarks",
 	"pallet-bitcoin-vaults/runtime-benchmarks",
 	"pallet-rbac/runtime-benchmarks",
+	"pallet-fund-admin/runtime-benchmarks",
 	#Prebuilt pallets
 	"pallet-alliance/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
@@ -306,6 +310,7 @@ try-runtime = [
 	"pallet-template/try-runtime",
 	"pallet-mapped-assets/try-runtime",
 	"pallet-afloat/try-runtime",
+	"pallet-fund-admin/try-runtime",
 	# Prebuilt Pallets
 	"pallet-alliance/try-runtime",
 	"pallet-assets/try-runtime",

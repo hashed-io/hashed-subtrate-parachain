@@ -1085,6 +1085,64 @@ impl pallet_fruniques::Config for Runtime {
 }
 
 parameter_types! {
+  pub const MaxDocuments:u32 = 100;
+  pub const MaxProjectsPerUser:u32 = 10_000;
+  pub const MaxUserPerProject:u32 = 100_000; // should be the sum of the max number of builders, investors, issuers, regional centers
+  pub const MaxBuildersPerProject:u32 = 25_00;
+  pub const MaxInvestorsPerProject:u32 = 25_000;
+  pub const MaxIssuersPerProject:u32 = 25_000;
+  pub const MaxRegionalCenterPerProject:u32 = 25_000;
+  pub const MaxProjectsPerInvestor:u32 = 1;
+  pub const MaxDrawdownsPerProject:u32 = 10_000;
+  pub const MaxTransactionsPerDrawdown:u32 = 1_000;
+  pub const MaxRegistrationsAtTime:u32 = 100;
+  pub const MaxExpendituresPerProject:u32 = 100_000;
+  pub const MaxBanksPerProject:u32 = 10_000;
+  pub const MaxJobEligiblesByProject:u32 = 100_000;
+  pub const MaxRevenuesByProject:u32 = 100_000;
+  pub const MaxTransactionsPerRevenue:u32 = 1_000;
+  pub const MaxStatusChangesPerDrawdown:u32 = 1_000;
+  pub const MaxStatusChangesPerRevenue:u32 = 1_000;
+  pub const MinAdminBalance: Balance = 10_000_000_000_000;
+  pub const TransferAmount: Balance = 10_000_000_000_000;
+  pub const MaxRecoveryChanges:u32 = 1_000;
+}
+
+impl pallet_fund_admin::Config for Runtime {
+  type RuntimeEvent = RuntimeEvent;
+  type Timestamp = Timestamp;
+  type Moment = Moment;
+  type Rbac = RBAC;
+  type RemoveOrigin = EitherOfDiverse<
+    EnsureRoot<AccountId>,
+    pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+  >;
+  type Currency = Balances;
+
+  type MaxDocuments = MaxDocuments;
+  type MaxProjectsPerUser = MaxProjectsPerUser;
+  type MaxUserPerProject = MaxUserPerProject;
+  type MaxBuildersPerProject = MaxBuildersPerProject;
+  type MaxInvestorsPerProject = MaxInvestorsPerProject;
+  type MaxIssuersPerProject = MaxIssuersPerProject;
+  type MaxRegionalCenterPerProject = MaxRegionalCenterPerProject;
+  type MaxDrawdownsPerProject = MaxDrawdownsPerProject;
+  type MaxTransactionsPerDrawdown = MaxTransactionsPerDrawdown;
+  type MaxRegistrationsAtTime = MaxRegistrationsAtTime;
+  type MaxExpendituresPerProject = MaxExpendituresPerProject;
+  type MaxProjectsPerInvestor = MaxProjectsPerInvestor;
+  type MaxBanksPerProject = MaxBanksPerProject;
+  type MaxJobEligiblesByProject = MaxJobEligiblesByProject;
+  type MaxRevenuesByProject = MaxRevenuesByProject;
+  type MaxTransactionsPerRevenue = MaxTransactionsPerRevenue;
+  type MaxStatusChangesPerDrawdown = MaxStatusChangesPerDrawdown;
+  type MaxStatusChangesPerRevenue = MaxStatusChangesPerRevenue;
+  type MaxRecoveryChanges = MaxRecoveryChanges;
+  type MinAdminBalance = MinAdminBalance;
+  type TransferAmount = TransferAmount;
+}
+
+parameter_types! {
   pub const LabelMaxLen: u32 = 32;
   pub const MaxAuthsPerMarket: u32 = 30;
   pub const MaxRolesPerAuth : u32 = 1;
@@ -1239,6 +1297,7 @@ construct_runtime!(
 		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>}  = 157,
 		Afloat: pallet_afloat::{Pallet, Call, Storage, Event<T>}  = 158,
 		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Config<T>, Event<T>}  = 159,
+		FundAdmin: pallet_fund_admin::{Pallet, Call, Storage, Event<T>}  = 160,
 	}
 );
 
@@ -1255,6 +1314,7 @@ mod benches {
 		[pallet_confidential_docs, ConfidentialDocs]
 		[pallet_bitcoin_vaults, BitcoinVaults]
 		[pallet_rbac, RBAC]
+		[pallet_fund_admin, FundAdmin]
 	);
 }
 
