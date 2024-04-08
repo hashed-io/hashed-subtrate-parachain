@@ -59,6 +59,10 @@ if [[ ! -z ${BLOCKS_PRUNING} ]]; then
     collator_args+=(--blocks-pruning ${BLOCKS_PRUNING})
 fi
 
+if [[ ! -z ${COLLATOR_DB_CACHE} ]]; then
+    collator_args+=(--db-cache ${COLLATOR_DB_CACHE})
+fi
+
 if [[ ! -z ${LISTEN_ADDR} ]]; then
     collator_args+=(--listen-addr ${LISTEN_ADDR})
 else
@@ -100,6 +104,10 @@ fi
 if [[ ! -z ${RPC_METHODS} ]]; then
     collator_args+=(--rpc-methods ${RPC_METHODS})
     relay_args+=(--rpc-methods ${RPC_METHODS})
+fi
+
+if [[ ! -z ${RELAY_DB_CACHE} ]]; then
+    relay_args+=(--db-cache ${RELAY_DB_CACHE})
 fi
 
 
