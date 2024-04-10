@@ -984,16 +984,16 @@ parameter_types! {
 }
 
 impl pallet_rbac::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type RemoveOrigin = RootOrThreeFifthsOfCouncil;
-  type MaxScopesPerPallet = MaxScopesPerPallet;
-  type MaxRolesPerPallet = MaxRolesPerPallet;
-  type RoleMaxLen = RoleMaxLen;
-  type PermissionMaxLen = PermissionMaxLen;
-  type MaxPermissionsPerRole = MaxPermissionsPerRole;
-  type MaxRolesPerUser = MaxRolesPerUser;
-  type MaxUsersPerRole = MaxUsersPerRole;
-  type WeightInfo = pallet_rbac::weights::SubstrateWeight<Runtime>;
+	type RuntimeEvent = RuntimeEvent;
+	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
+	type MaxScopesPerPallet = MaxScopesPerPallet;
+	type MaxRolesPerPallet = MaxRolesPerPallet;
+	type RoleMaxLen = RoleMaxLen;
+	type PermissionMaxLen = PermissionMaxLen;
+	type MaxPermissionsPerRole = MaxPermissionsPerRole;
+	type MaxRolesPerUser = MaxRolesPerUser;
+	type MaxUsersPerRole = MaxUsersPerRole;
+	type WeightInfo = pallet_rbac::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1054,25 +1054,29 @@ parameter_types! {
 }
 
 impl pallet_mapped_assets::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type Balance = u128;
-  type AssetId = u32;
-  type AssetIdParameter = u32;
-  type Currency = Balances;
-  type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
-  type ForceOrigin = EnsureRoot<AccountId>;
-  type AssetDeposit = AssetDeposit;
-  type AssetAccountDeposit = ConstU128<DOLLARS>;
-  type MetadataDepositBase = MetadataDepositBase;
-  type MetadataDepositPerByte = MetadataDepositPerByte;
-  type ApprovalDeposit = ApprovalDeposit;
-  type StringLimit = StringLimit;
-  type Freezer = ();
-  type Extra = ();
-  type WeightInfo = ();
-  type RemoveItemsLimit = RemoveItemsLimit;
-  type CallbackHandle = ();
-  type Rbac = RBAC;
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = u128;
+	type AssetId = u32;
+	type AssetIdParameter = u32;
+	type Currency = Balances;
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<DOLLARS>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type WeightInfo = ();
+	type RemoveItemsLimit = RemoveItemsLimit;
+	type CallbackHandle = ();
+	type Rbac = RBAC;
+}
+
+parameter_types! {
+	pub const MaxAttributes: u32 = 200;
 }
 
 impl pallet_fruniques::Config for Runtime {
@@ -1082,6 +1086,7 @@ impl pallet_fruniques::Config for Runtime {
 	type ChildMaxLen = ChildMaxLen;
 	type MaxParentsInCollection = MaxParentsInCollection;
 	// type PalletId = FruniquesPalletId;
+	type MaxAttributes = MaxAttributes;
 }
 
 parameter_types! {
@@ -1099,32 +1104,32 @@ parameter_types! {
   pub const MaxOffersPerMarket: u32 = 100;
 }
 impl pallet_gated_marketplace::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type MaxAuthsPerMarket = MaxAuthsPerMarket;
-  type MaxRolesPerAuth = MaxRolesPerAuth;
-  type MaxApplicants = MaxApplicants;
-  type MaxBlockedUsersPerMarket = MaxBlockedUsersPerMarket;
-  type LabelMaxLen = LabelMaxLen;
-  type NotesMaxLen = NotesMaxLen;
-  type MaxFeedbackLen = MaxFeedbackLen;
-  type NameMaxLen = NameMaxLen;
-  type MaxFiles = MaxFiles;
-  type MaxApplicationsPerCustodian = MaxApplicationsPerCustodian;
-  type MaxOffersPerMarket = MaxOffersPerMarket;
-  type MaxMarketsPerItem = MaxMarketsPerItem;
-  type Timestamp = Timestamp;
-  type Moment = u64;
-  //type LocalCurrency = Balances;
-  type Rbac = RBAC;
+	type RuntimeEvent = RuntimeEvent;
+	type MaxAuthsPerMarket = MaxAuthsPerMarket;
+	type MaxRolesPerAuth = MaxRolesPerAuth;
+	type MaxApplicants = MaxApplicants;
+	type MaxBlockedUsersPerMarket = MaxBlockedUsersPerMarket;
+	type LabelMaxLen = LabelMaxLen;
+	type NotesMaxLen = NotesMaxLen;
+	type MaxFeedbackLen = MaxFeedbackLen;
+	type NameMaxLen = NameMaxLen;
+	type MaxFiles = MaxFiles;
+	type MaxApplicationsPerCustodian = MaxApplicationsPerCustodian;
+	type MaxOffersPerMarket = MaxOffersPerMarket;
+	type MaxMarketsPerItem = MaxMarketsPerItem;
+	type Timestamp = Timestamp;
+	type Moment = u64;
+	//type LocalCurrency = Balances;
+	type Rbac = RBAC;
 }
 
 impl pallet_afloat::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type Currency = Balances;
-//   type TimeProvider = Timestamp;
-  //type RemoveOrigin = EnsureRoot<AccountId>;
-  type Rbac = RBAC;
-  type ItemId = u32;
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type Rbac = RBAC;
+	#[cfg(feature = "runtime-benchmarks")]
+	type AfloatBenchHelper = ();
+	type WeightInfo = pallet_afloat::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1132,11 +1137,11 @@ parameter_types! {
 }
 
 impl pallet_fund_admin_records::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type RemoveOrigin = RootOrThreeFifthsOfCouncil;
-  type Timestamp = Timestamp;
-  type Moment = u64;
-  type MaxRecordsAtTime = MaxRecordsAtTime;
+	type RuntimeEvent = RuntimeEvent;
+	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
+	type Timestamp = Timestamp;
+	type Moment = u64;
+	type MaxRecordsAtTime = MaxRecordsAtTime;
 }
 
 parameter_types! {
@@ -1255,6 +1260,7 @@ mod benches {
 		[pallet_confidential_docs, ConfidentialDocs]
 		[pallet_bitcoin_vaults, BitcoinVaults]
 		[pallet_rbac, RBAC]
+		[pallet_afloat, Afloat]
 	);
 }
 
