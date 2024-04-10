@@ -24,16 +24,16 @@ smallvec = "1.11.0"
 
 # Local Pallets
 
-pallet-template = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/template", default-features = false }
-pallet-bitcoin-vaults = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/bitcoin-vaults", default-features= false }
-pallet-gated-marketplace = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/gated-marketplace", default-features = false }
-pallet-rbac = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/rbac", default-features = false }
-pallet-confidential-docs = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/confidential-docs", default-features = false }
-pallet-fund-admin = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/fund-admin", default-features = false }
-pallet-afloat = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/afloat", default-features = false }
-pallet-mapped-assets = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/mapped-assets", default-features = false }
-pallet-fund-admin-records = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/fund-admin-records", default-features = false }
-pallet-fruniques = { path = "/home/armando/Desktop/hashed-pallets/hashed-pallets/pallets/fruniques", default-features = false }
+pallet-template = { path = "../../hashed-pallets/pallets/template", default-features = false }
+pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features= false }
+pallet-gated-marketplace = { path = "../../hashed-pallets/pallets/gated-marketplace", default-features = false }
+pallet-rbac = { path = "../../hashed-pallets/pallets/rbac", default-features = false }
+pallet-confidential-docs = { path = "../../hashed-pallets/pallets/confidential-docs", default-features = false }
+pallet-fund-admin = { path = "../../hashed-pallets/pallets/fund-admin", default-features = false }
+pallet-afloat = { path = "../../hashed-pallets/pallets/afloat", default-features = false }
+pallet-mapped-assets = { path = "../../hashed-pallets/pallets/mapped-assets", default-features = false }
+pallet-fund-admin-records = { path = "../../hashed-pallets/pallets/fund-admin-records", default-features = false }
+pallet-fruniques = { path = "../../hashed-pallets/pallets/fruniques", default-features = false }
 
 # Prebuilt Pallets
 pallet-alliance = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
