@@ -18,7 +18,7 @@ spec:
       containers:
       - name: hashed-collator-1
         imagePullPolicy: IfNotPresent
-        image: sebastianmontero/hashed-substrate-collator-hashed:56eef87e580bc0cbe3e0617f204a2ef3257ab9d6
+        image: sebastianmontero/hashed-substrate-collator-hashed:e3cbb15367469502193220e4070d063a3d45b4c4
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
         args: ["hashed", "/var/www/hashed/hashed"]
         volumeMounts:
@@ -37,6 +37,10 @@ spec:
             value: "archive"
           - name: RELAY_PRUNING
             value: "1000"
+          - name: RPC_MAX_CONNECTIONS
+            value: "500"
+          - name: RPC_METHODS
+            value: "unsafe"
           # - name: RUST_LOG
           #   value: "debug"
           # - name: RUST_LOG
@@ -51,7 +55,7 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "15G"
+            memory: "150G"
             cpu: "7.5"
           # requests:
           #   ephemeral-storage: 25Gi
