@@ -49,7 +49,7 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "11G"
+            memory: "110G"
             cpu: "4.5"
           # requests:
           #   ephemeral-storage: 25Gi
