@@ -49,8 +49,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "8G"
-            cpu: "2"
+            memory: "10G"
+            cpu: "3"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -59,8 +59,13 @@ spec:
         - containerPort: 9946
         - containerPort: 30333
         - containerPort: 40333
-      # nodeSelector:
-      #   node.kubernetes.io/instance-type: c6id.2xlarge
+      nodeSelector:
+        cloud.google.com/gke-nodepool: hashed-systems-node-pool-hp
+      tolerations:
+      - key: special
+        operator: Equal
+        value: hp
+        effect: NoSchedule
   volumeClaimTemplates:
   - metadata:
       name: hashed-collator-3-pvc
@@ -70,8 +75,8 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 400Gi
-      storageClassName: standard-rwo
+          storage: 600Gi
+      storageClassName: premium-rwo
 ---
 apiVersion: v1
 kind: Service

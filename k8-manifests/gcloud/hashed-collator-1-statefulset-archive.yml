@@ -18,7 +18,7 @@ spec:
       containers:
       - name: hashed-collator-1
         imagePullPolicy: IfNotPresent
-        image: sebastianmontero/hashed-substrate-collator-hashed:56eef87e580bc0cbe3e0617f204a2ef3257ab9d6
+        image: sebastianmontero/hashed-substrate-collator-hashed:cb6e9e318b79192263dfb87fb777e3362f058d32
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
         args: ["hashed", "/var/www/hashed/hashed"]
         volumeMounts:
@@ -37,8 +37,21 @@ spec:
             value: "archive"
           - name: RELAY_PRUNING
             value: "1000"
+          - name: RPC_MAX_CONNECTIONS
+            value: "500"
+          - name: RPC_METHODS
+            value: "unsafe"
+          # - name: COLLATOR_DB_CACHE
+          #   value: "7000"
+          # - name: RELAY_DB_CACHE
+          #   value: "7000"
+          # - name: RELAY_DB_CACHE
+          #   value: 7000
+
           # - name: RUST_LOG
           #   value: "debug"
+          - name: RUST_LOG
+            value: "lusage=trace"
           # - name: RUST_LOG
           #   value: "sub-libp2p=trace"
           # - name: RUST_LOG
@@ -51,7 +64,7 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "25G"
+            memory: "28G"
             cpu: "7.5"
           # requests:
           #   ephemeral-storage: 25Gi
@@ -78,7 +91,7 @@ spec:
       resources:
         requests:
           storage: 1Ti
-      storageClassName: standard-rwo
+      storageClassName: premium-rwo
 ---
 apiVersion: v1
 kind: Service

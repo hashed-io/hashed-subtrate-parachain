@@ -51,8 +51,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "12G"
-            cpu: "3.5"
+            memory: "8G"
+            cpu: "2"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -62,7 +62,12 @@ spec:
         - containerPort: 30333
         - containerPort: 40333
       # nodeSelector:
-      #   node.kubernetes.io/instance-type: c6id.2xlarge
+      #   cloud.google.com/gke-nodepool: hashed-systems-node-pool-hp
+      # tolerations:
+      # - key: special
+      #   operator: Equal
+      #   value: hp
+      #   effect: NoSchedule
   volumeClaimTemplates:
   - metadata:
       name: md5-collator-2-pvc
