@@ -7,9 +7,9 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 pub mod constants;
+mod migrations;
 mod weights;
 pub mod xcm_config;
-mod migrations;
 use constants::*;
 
 use core::marker::PhantomData;
@@ -26,7 +26,6 @@ use sp_runtime::{
 	ApplyExtrinsicResult, MultiSignature,
 };
 
-
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -36,9 +35,13 @@ use frame_support::{
 	construct_runtime,
 	dispatch::DispatchClass,
 	genesis_builder_helper::{build_config, create_default_config},
-	parameter_types,
 	pallet_prelude::Get,
-	traits::{ AsEnsureOriginWithArg, ConstBool, ConstU32, ConstU64, ConstU128, ConstU8, EitherOfDiverse, Everything, InstanceFilter, WithdrawReasons, tokens::{ConversionFromAssetBalance, PayFromAccount}},
+	parameter_types,
+	traits::{
+		tokens::{ConversionFromAssetBalance, PayFromAccount},
+		AsEnsureOriginWithArg, ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, EitherOfDiverse,
+		Everything, InstanceFilter, WithdrawReasons,
+	},
 	weights::{
 		constants::WEIGHT_REF_TIME_PER_SECOND, ConstantMultiplier, Weight, WeightToFeeCoefficient,
 		WeightToFeeCoefficients, WeightToFeePolynomial,
@@ -50,7 +53,7 @@ use frame_system::{
 	EnsureRoot, EnsureSigned,
 };
 pub use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-pub use sp_runtime::{MultiAddress, Perbill, Percent, Permill,RuntimeDebug};
+pub use sp_runtime::{MultiAddress, Perbill, Percent, Permill, RuntimeDebug};
 use xcm_config::{XcmConfig, XcmOriginToTransactDispatchOrigin};
 
 #[cfg(any(feature = "std", test))]
@@ -64,7 +67,6 @@ use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 // XCM Imports
 use xcm::latest::prelude::BodyId;
 use xcm_executor::XcmExecutor;
-
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
 pub type Signature = MultiSignature;
@@ -135,7 +137,7 @@ pub type Executive = frame_executive::Executive<
 	Block,
 	frame_system::ChainContext<Runtime>,
 	Runtime,
-	AllPalletsWithSystem
+	AllPalletsWithSystem,
 >;
 
 pub type RootOrThreeFifthsOfCouncil = EitherOfDiverse<
@@ -176,7 +178,10 @@ impl WeightToFeePolynomial for WeightToFee {
 /// to even the core data structures.
 pub mod opaque {
 	use super::*;
-	use sp_runtime::{generic, traits::{BlakeTwo256, Hash as HashT}};
+	use sp_runtime::{
+		generic,
+		traits::{BlakeTwo256, Hash as HashT},
+	};
 
 	pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
 	/// Opaque block header type.
@@ -500,7 +505,6 @@ impl pallet_collator_selection::Config for Runtime {
 	type WeightInfo = ();
 }
 
-
 // Prebuilt pallets
 
 parameter_types! {
@@ -586,7 +590,6 @@ impl pallet_treasury::Config for Runtime {
 	type BenchmarkHelper = ();
 }
 
-
 parameter_types! {
 	pub const ChildBountyValueMinimum: Balance = 1 * DOLLARS;
 }
@@ -629,7 +632,6 @@ impl pallet_assets::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 }
-
 
 parameter_types! {
 	pub CouncilMotionDuration: BlockNumber = 3 * DAYS;
@@ -679,7 +681,6 @@ impl pallet_society::Config for Runtime {
 	type MaxPayouts = ConstU32<5>;
 	type MaxBids = ConstU32<3>;
 	type WeightInfo = pallet_society::weights::SubstrateWeight<Runtime>;
-
 }
 
 parameter_types! {
@@ -832,12 +833,12 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			ProxyType::Any => true,
 			ProxyType::NonTransfer => !matches!(
 				c,
-				RuntimeCall::Balances(..)
-					| RuntimeCall::Assets(..)
-					| RuntimeCall::Uniques(..)
-					| RuntimeCall::Fruniques(..)
-					| RuntimeCall::Vesting(pallet_vesting::Call::vested_transfer { .. })
-					| RuntimeCall::Indices(pallet_indices::Call::transfer { .. })
+				RuntimeCall::Balances(..) |
+					RuntimeCall::Assets(..) |
+					RuntimeCall::Uniques(..) |
+					RuntimeCall::Fruniques(..) |
+					RuntimeCall::Vesting(pallet_vesting::Call::vested_transfer { .. }) |
+					RuntimeCall::Indices(pallet_indices::Call::transfer { .. })
 			),
 			ProxyType::Governance => matches!(
 				c,
@@ -906,11 +907,9 @@ impl pallet_whitelist::Config for Runtime {
 	type WeightInfo = pallet_whitelist::weights::SubstrateWeight<Runtime>;
 }
 
-
 // Custom Pallets
 
 /// The payload being signed in transactions.
-
 use sp_runtime::SaturatedConversion;
 
 pub type SignedPayload = sp_runtime::generic::SignedPayload<RuntimeCall, SignedExtra>;
@@ -962,8 +961,6 @@ where
 	}
 }
 
-
-
 impl frame_system::offchain::SigningTypes for Runtime {
 	type Public = <Signature as sp_runtime::traits::Verify>::Signer;
 	type Signature = Signature;
@@ -984,16 +981,16 @@ parameter_types! {
 }
 
 impl pallet_rbac::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type RemoveOrigin = RootOrThreeFifthsOfCouncil;
-  type MaxScopesPerPallet = MaxScopesPerPallet;
-  type MaxRolesPerPallet = MaxRolesPerPallet;
-  type RoleMaxLen = RoleMaxLen;
-  type PermissionMaxLen = PermissionMaxLen;
-  type MaxPermissionsPerRole = MaxPermissionsPerRole;
-  type MaxRolesPerUser = MaxRolesPerUser;
-  type MaxUsersPerRole = MaxUsersPerRole;
-  type WeightInfo = pallet_rbac::weights::SubstrateWeight<Runtime>;
+	type RuntimeEvent = RuntimeEvent;
+	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
+	type MaxScopesPerPallet = MaxScopesPerPallet;
+	type MaxRolesPerPallet = MaxRolesPerPallet;
+	type RoleMaxLen = RoleMaxLen;
+	type PermissionMaxLen = PermissionMaxLen;
+	type MaxPermissionsPerRole = MaxPermissionsPerRole;
+	type MaxRolesPerUser = MaxRolesPerUser;
+	type MaxUsersPerRole = MaxUsersPerRole;
+	type WeightInfo = pallet_rbac::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1054,25 +1051,29 @@ parameter_types! {
 }
 
 impl pallet_mapped_assets::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type Balance = u128;
-  type AssetId = u32;
-  type AssetIdParameter = u32;
-  type Currency = Balances;
-  type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
-  type ForceOrigin = EnsureRoot<AccountId>;
-  type AssetDeposit = AssetDeposit;
-  type AssetAccountDeposit = ConstU128<DOLLARS>;
-  type MetadataDepositBase = MetadataDepositBase;
-  type MetadataDepositPerByte = MetadataDepositPerByte;
-  type ApprovalDeposit = ApprovalDeposit;
-  type StringLimit = StringLimit;
-  type Freezer = ();
-  type Extra = ();
-  type WeightInfo = ();
-  type RemoveItemsLimit = RemoveItemsLimit;
-  type CallbackHandle = ();
-  type Rbac = RBAC;
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = u128;
+	type AssetId = u32;
+	type AssetIdParameter = u32;
+	type Currency = Balances;
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetDeposit;
+	type AssetAccountDeposit = ConstU128<DOLLARS>;
+	type MetadataDepositBase = MetadataDepositBase;
+	type MetadataDepositPerByte = MetadataDepositPerByte;
+	type ApprovalDeposit = ApprovalDeposit;
+	type StringLimit = StringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type WeightInfo = ();
+	type RemoveItemsLimit = RemoveItemsLimit;
+	type CallbackHandle = ();
+	type Rbac = RBAC;
+}
+
+parameter_types! {
+	pub const MaxAttributes: u32 = 200;
 }
 
 impl pallet_fruniques::Config for Runtime {
@@ -1082,6 +1083,7 @@ impl pallet_fruniques::Config for Runtime {
 	type ChildMaxLen = ChildMaxLen;
 	type MaxParentsInCollection = MaxParentsInCollection;
 	// type PalletId = FruniquesPalletId;
+	type MaxAttributes = MaxAttributes;
 }
 
 parameter_types! {
@@ -1109,37 +1111,37 @@ parameter_types! {
 }
 
 impl pallet_fund_admin::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type Timestamp = Timestamp;
-  type Moment = Moment;
-  type Rbac = RBAC;
-  type RemoveOrigin = EitherOfDiverse<
-    EnsureRoot<AccountId>,
-    pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
-  >;
-  type Currency = Balances;
+	type RuntimeEvent = RuntimeEvent;
+	type Timestamp = Timestamp;
+	type Moment = Moment;
+	type Rbac = RBAC;
+	type RemoveOrigin = EitherOfDiverse<
+		EnsureRoot<AccountId>,
+		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+	>;
+	type Currency = Balances;
 
-  type MaxDocuments = MaxDocuments;
-  type MaxProjectsPerUser = MaxProjectsPerUser;
-  type MaxUserPerProject = MaxUserPerProject;
-  type MaxBuildersPerProject = MaxBuildersPerProject;
-  type MaxInvestorsPerProject = MaxInvestorsPerProject;
-  type MaxIssuersPerProject = MaxIssuersPerProject;
-  type MaxRegionalCenterPerProject = MaxRegionalCenterPerProject;
-  type MaxDrawdownsPerProject = MaxDrawdownsPerProject;
-  type MaxTransactionsPerDrawdown = MaxTransactionsPerDrawdown;
-  type MaxRegistrationsAtTime = MaxRegistrationsAtTime;
-  type MaxExpendituresPerProject = MaxExpendituresPerProject;
-  type MaxProjectsPerInvestor = MaxProjectsPerInvestor;
-  type MaxBanksPerProject = MaxBanksPerProject;
-  type MaxJobEligiblesByProject = MaxJobEligiblesByProject;
-  type MaxRevenuesByProject = MaxRevenuesByProject;
-  type MaxTransactionsPerRevenue = MaxTransactionsPerRevenue;
-  type MaxStatusChangesPerDrawdown = MaxStatusChangesPerDrawdown;
-  type MaxStatusChangesPerRevenue = MaxStatusChangesPerRevenue;
-  type MaxRecoveryChanges = MaxRecoveryChanges;
-  type MinAdminBalance = MinAdminBalance;
-  type TransferAmount = TransferAmount;
+	type MaxDocuments = MaxDocuments;
+	type MaxProjectsPerUser = MaxProjectsPerUser;
+	type MaxUserPerProject = MaxUserPerProject;
+	type MaxBuildersPerProject = MaxBuildersPerProject;
+	type MaxInvestorsPerProject = MaxInvestorsPerProject;
+	type MaxIssuersPerProject = MaxIssuersPerProject;
+	type MaxRegionalCenterPerProject = MaxRegionalCenterPerProject;
+	type MaxDrawdownsPerProject = MaxDrawdownsPerProject;
+	type MaxTransactionsPerDrawdown = MaxTransactionsPerDrawdown;
+	type MaxRegistrationsAtTime = MaxRegistrationsAtTime;
+	type MaxExpendituresPerProject = MaxExpendituresPerProject;
+	type MaxProjectsPerInvestor = MaxProjectsPerInvestor;
+	type MaxBanksPerProject = MaxBanksPerProject;
+	type MaxJobEligiblesByProject = MaxJobEligiblesByProject;
+	type MaxRevenuesByProject = MaxRevenuesByProject;
+	type MaxTransactionsPerRevenue = MaxTransactionsPerRevenue;
+	type MaxStatusChangesPerDrawdown = MaxStatusChangesPerDrawdown;
+	type MaxStatusChangesPerRevenue = MaxStatusChangesPerRevenue;
+	type MaxRecoveryChanges = MaxRecoveryChanges;
+	type MinAdminBalance = MinAdminBalance;
+	type TransferAmount = TransferAmount;
 }
 
 parameter_types! {
@@ -1157,32 +1159,32 @@ parameter_types! {
   pub const MaxOffersPerMarket: u32 = 100;
 }
 impl pallet_gated_marketplace::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type MaxAuthsPerMarket = MaxAuthsPerMarket;
-  type MaxRolesPerAuth = MaxRolesPerAuth;
-  type MaxApplicants = MaxApplicants;
-  type MaxBlockedUsersPerMarket = MaxBlockedUsersPerMarket;
-  type LabelMaxLen = LabelMaxLen;
-  type NotesMaxLen = NotesMaxLen;
-  type MaxFeedbackLen = MaxFeedbackLen;
-  type NameMaxLen = NameMaxLen;
-  type MaxFiles = MaxFiles;
-  type MaxApplicationsPerCustodian = MaxApplicationsPerCustodian;
-  type MaxOffersPerMarket = MaxOffersPerMarket;
-  type MaxMarketsPerItem = MaxMarketsPerItem;
-  type Timestamp = Timestamp;
-  type Moment = u64;
-  //type LocalCurrency = Balances;
-  type Rbac = RBAC;
+	type RuntimeEvent = RuntimeEvent;
+	type MaxAuthsPerMarket = MaxAuthsPerMarket;
+	type MaxRolesPerAuth = MaxRolesPerAuth;
+	type MaxApplicants = MaxApplicants;
+	type MaxBlockedUsersPerMarket = MaxBlockedUsersPerMarket;
+	type LabelMaxLen = LabelMaxLen;
+	type NotesMaxLen = NotesMaxLen;
+	type MaxFeedbackLen = MaxFeedbackLen;
+	type NameMaxLen = NameMaxLen;
+	type MaxFiles = MaxFiles;
+	type MaxApplicationsPerCustodian = MaxApplicationsPerCustodian;
+	type MaxOffersPerMarket = MaxOffersPerMarket;
+	type MaxMarketsPerItem = MaxMarketsPerItem;
+	type Timestamp = Timestamp;
+	type Moment = u64;
+	//type LocalCurrency = Balances;
+	type Rbac = RBAC;
 }
 
 impl pallet_afloat::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type Currency = Balances;
-//   type TimeProvider = Timestamp;
-  //type RemoveOrigin = EnsureRoot<AccountId>;
-  type Rbac = RBAC;
-  type ItemId = u32;
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type Rbac = RBAC;
+	#[cfg(feature = "runtime-benchmarks")]
+	type AfloatBenchHelper = ();
+	type WeightInfo = pallet_afloat::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1190,11 +1192,11 @@ parameter_types! {
 }
 
 impl pallet_fund_admin_records::Config for Runtime {
-  type RuntimeEvent = RuntimeEvent;
-  type RemoveOrigin = RootOrThreeFifthsOfCouncil;
-  type Timestamp = Timestamp;
-  type Moment = u64;
-  type MaxRecordsAtTime = MaxRecordsAtTime;
+	type RuntimeEvent = RuntimeEvent;
+	type RemoveOrigin = RootOrThreeFifthsOfCouncil;
+	type Timestamp = Timestamp;
+	type Moment = u64;
+	type MaxRecordsAtTime = MaxRecordsAtTime;
 }
 
 parameter_types! {
@@ -1234,8 +1236,6 @@ impl pallet_uniques::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
 }
-
-
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
@@ -1314,6 +1314,7 @@ mod benches {
 		[pallet_confidential_docs, ConfidentialDocs]
 		[pallet_bitcoin_vaults, BitcoinVaults]
 		[pallet_rbac, RBAC]
+		[pallet_afloat, Afloat]
 		[pallet_fund_admin, FundAdmin]
 	);
 }

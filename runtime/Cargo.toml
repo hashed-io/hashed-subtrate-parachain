@@ -22,26 +22,18 @@ log = { version = "0.4.20", default-features = false }
 scale-info = { version = "2.10.0", default-features = false, features = ["derive"] }
 smallvec = "1.11.0"
 
-# Hashed Dependencies
-pallet-template = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-# pallet-fruniques = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-pallet-fruniques = { path = "../../hashed-pallets/pallets/fruniques", default-features = false }
-# pallet-bitcoin-vaults = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features = false }
-# pallet-gated-marketplace = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
+# Local Pallets
+
+pallet-template = { path = "../../hashed-pallets/pallets/template", default-features = false }
+pallet-bitcoin-vaults = { path = "../../hashed-pallets/pallets/bitcoin-vaults", default-features= false }
 pallet-gated-marketplace = { path = "../../hashed-pallets/pallets/gated-marketplace", default-features = false }
-# pallet-rbac = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-rbac = { path = "../../hashed-pallets/pallets/rbac", default-features = false }
-# pallet-confidential-docs = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-confidential-docs = { path = "../../hashed-pallets/pallets/confidential-docs", default-features = false }
-# pallet-afloat = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-pallet-afloat = { path = "../../hashed-pallets/pallets/afloat", default-features = false }
-# pallet-mapped-assets = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-pallet-mapped-assets = { path = "../../hashed-pallets/pallets/mapped-assets", default-features = false }
-# pallet-fund-admin-records = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
-pallet-fund-admin-records = { path = "../../hashed-pallets/pallets/fund-admin-records", default-features = false }
-# pallet-fund-admin = { git = "https://github.com/hashed-io/hashed-pallets", tag ="0.1.11", default-features = false }
 pallet-fund-admin = { path = "../../hashed-pallets/pallets/fund-admin", default-features = false }
+pallet-afloat = { path = "../../hashed-pallets/pallets/afloat", default-features = false }
+pallet-mapped-assets = { path = "../../hashed-pallets/pallets/mapped-assets", default-features = false }
+pallet-fund-admin-records = { path = "../../hashed-pallets/pallets/fund-admin-records", default-features = false }
+pallet-fruniques = { path = "../../hashed-pallets/pallets/fruniques", default-features = false }
 
 # Prebuilt Pallets
 pallet-alliance = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
@@ -247,6 +239,7 @@ runtime-benchmarks = [
 	"pallet-confidential-docs/runtime-benchmarks",
 	"pallet-bitcoin-vaults/runtime-benchmarks",
 	"pallet-rbac/runtime-benchmarks",
+	"pallet-afloat/runtime-benchmarks",
 	"pallet-fund-admin/runtime-benchmarks",
 	#Prebuilt pallets
 	"pallet-alliance/runtime-benchmarks",
