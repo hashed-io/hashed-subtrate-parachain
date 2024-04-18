@@ -1105,8 +1105,8 @@ parameter_types! {
   pub const MaxTransactionsPerRevenue:u32 = 1_000;
   pub const MaxStatusChangesPerDrawdown:u32 = 1_000;
   pub const MaxStatusChangesPerRevenue:u32 = 1_000;
-  pub const MinAdminBalance: Balance = 10_000_000_000_000;
-  pub const TransferAmount: Balance = 10_000_000_000_000;
+  pub const MinAdminBalance: Balance = 1_000_000_000_000_000;
+  pub const TransferAmount: Balance = UNIT;
   pub const MaxRecoveryChanges:u32 = 1_000;
 }
 
