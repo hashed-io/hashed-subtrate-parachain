@@ -1100,12 +1100,14 @@ parameter_types! {
   pub const MaxRegistrationsAtTime:u32 = 100;
   pub const MaxExpendituresPerProject:u32 = 100_000;
   pub const MaxBanksPerProject:u32 = 10_000;
+  // For benchmark
+  // pub const MaxBanksPerProject: u32 = 200;
   pub const MaxJobEligiblesByProject:u32 = 100_000;
   pub const MaxRevenuesByProject:u32 = 100_000;
   pub const MaxTransactionsPerRevenue:u32 = 1_000;
   pub const MaxStatusChangesPerDrawdown:u32 = 1_000;
   pub const MaxStatusChangesPerRevenue:u32 = 1_000;
-  pub const MinAdminBalance: Balance = 1_000_000_000_000_000;
+  pub const MinAdminBalance: Balance = UNIT;
   pub const TransferAmount: Balance = UNIT;
   pub const MaxRecoveryChanges:u32 = 1_000;
 }
@@ -1142,6 +1144,7 @@ impl pallet_fund_admin::Config for Runtime {
 	type MaxRecoveryChanges = MaxRecoveryChanges;
 	type MinAdminBalance = MinAdminBalance;
 	type TransferAmount = TransferAmount;
+	type WeightInfo = pallet_fund_admin::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
