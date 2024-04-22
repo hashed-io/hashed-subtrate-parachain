@@ -4206,6 +4206,7 @@ dependencies = [
  "pallet-democracy",
  "pallet-elections-phragmen",
  "pallet-fruniques",
+ "pallet-fund-admin",
  "pallet-fund-admin-records",
  "pallet-gated-marketplace",
  "pallet-identity",
@@ -6927,6 +6928,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-fund-admin"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-balances",
+ "pallet-rbac",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io",
+ "sp-runtime",
+]
+
+[[package]]
 name = "pallet-fund-admin-records"
 version = "4.0.0-dev"
 dependencies = [
@@ -7553,7 +7571,6 @@ dependencies = [
 [[package]]
 name = "pallet-template"
 version = "4.0.0-dev"
-source = "git+https://github.com/hashed-io/hashed-pallets?tag=0.1.11#5cc43e4e82700bb665e6446d4a93f9cb7474928c"
 dependencies = [
  "frame-benchmarking",
  "frame-support",

@@ -7,9 +7,9 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 pub mod constants;
+mod migrations;
 mod weights;
 pub mod xcm_config;
-mod migrations;
 use constants::*;
 
 use core::marker::PhantomData;
@@ -26,7 +26,6 @@ use sp_runtime::{
 	ApplyExtrinsicResult, MultiSignature,
 };
 
-
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
@@ -36,9 +35,13 @@ use frame_support::{
 	construct_runtime,
 	dispatch::DispatchClass,
 	genesis_builder_helper::{build_config, create_default_config},
-	parameter_types,
 	pallet_prelude::Get,
-	traits::{ AsEnsureOriginWithArg, ConstBool, ConstU32, ConstU64, ConstU128, ConstU8, EitherOfDiverse, Everything, InstanceFilter, WithdrawReasons, tokens::{ConversionFromAssetBalance, PayFromAccount}},
+	parameter_types,
+	traits::{
+		tokens::{ConversionFromAssetBalance, PayFromAccount},
+		AsEnsureOriginWithArg, ConstBool, ConstU128, ConstU32, ConstU64, ConstU8, EitherOfDiverse,
+		Everything, InstanceFilter, WithdrawReasons,
+	},
 	weights::{
 		constants::WEIGHT_REF_TIME_PER_SECOND, ConstantMultiplier, Weight, WeightToFeeCoefficient,
 		WeightToFeeCoefficients, WeightToFeePolynomial,
@@ -50,7 +53,7 @@ use frame_system::{
 	EnsureRoot, EnsureSigned,
 };
 pub use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-pub use sp_runtime::{MultiAddress, Perbill, Percent, Permill,RuntimeDebug};
+pub use sp_runtime::{MultiAddress, Perbill, Percent, Permill, RuntimeDebug};
 use xcm_config::{XcmConfig, XcmOriginToTransactDispatchOrigin};
 
 #[cfg(any(feature = "std", test))]
@@ -64,7 +67,6 @@ use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 // XCM Imports
 use xcm::latest::prelude::BodyId;
 use xcm_executor::XcmExecutor;
-
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
 pub type Signature = MultiSignature;
@@ -135,7 +137,7 @@ pub type Executive = frame_executive::Executive<
 	Block,
 	frame_system::ChainContext<Runtime>,
 	Runtime,
-	AllPalletsWithSystem
+	AllPalletsWithSystem,
 >;
 
 pub type RootOrThreeFifthsOfCouncil = EitherOfDiverse<
@@ -176,7 +178,10 @@ impl WeightToFeePolynomial for WeightToFee {
 /// to even the core data structures.
 pub mod opaque {
 	use super::*;
-	use sp_runtime::{generic, traits::{BlakeTwo256, Hash as HashT}};
+	use sp_runtime::{
+		generic,
+		traits::{BlakeTwo256, Hash as HashT},
+	};
 
 	pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
 	/// Opaque block header type.
@@ -500,7 +505,6 @@ impl pallet_collator_selection::Config for Runtime {
 	type WeightInfo = ();
 }
 
-
 // Prebuilt pallets
 
 parameter_types! {
@@ -586,7 +590,6 @@ impl pallet_treasury::Config for Runtime {
 	type BenchmarkHelper = ();
 }
 
-
 parameter_types! {
 	pub const ChildBountyValueMinimum: Balance = 1 * DOLLARS;
 }
@@ -629,7 +632,6 @@ impl pallet_assets::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 }
-
 
 parameter_types! {
 	pub CouncilMotionDuration: BlockNumber = 3 * DAYS;
@@ -679,7 +681,6 @@ impl pallet_society::Config for Runtime {
 	type MaxPayouts = ConstU32<5>;
 	type MaxBids = ConstU32<3>;
 	type WeightInfo = pallet_society::weights::SubstrateWeight<Runtime>;
-
 }
 
 parameter_types! {
@@ -832,12 +833,12 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			ProxyType::Any => true,
 			ProxyType::NonTransfer => !matches!(
 				c,
-				RuntimeCall::Balances(..)
-					| RuntimeCall::Assets(..)
-					| RuntimeCall::Uniques(..)
-					| RuntimeCall::Fruniques(..)
-					| RuntimeCall::Vesting(pallet_vesting::Call::vested_transfer { .. })
-					| RuntimeCall::Indices(pallet_indices::Call::transfer { .. })
+				RuntimeCall::Balances(..) |
+					RuntimeCall::Assets(..) |
+					RuntimeCall::Uniques(..) |
+					RuntimeCall::Fruniques(..) |
+					RuntimeCall::Vesting(pallet_vesting::Call::vested_transfer { .. }) |
+					RuntimeCall::Indices(pallet_indices::Call::transfer { .. })
 			),
 			ProxyType::Governance => matches!(
 				c,
@@ -906,11 +907,9 @@ impl pallet_whitelist::Config for Runtime {
 	type WeightInfo = pallet_whitelist::weights::SubstrateWeight<Runtime>;
 }
 
-
 // Custom Pallets
 
 /// The payload being signed in transactions.
-
 use sp_runtime::SaturatedConversion;
 
 pub type SignedPayload = sp_runtime::generic::SignedPayload<RuntimeCall, SignedExtra>;
@@ -961,8 +960,6 @@ where
 		Some((call, (sp_runtime::MultiAddress::Id(address), signature.into(), extra)))
 	}
 }
-
-
 
 impl frame_system::offchain::SigningTypes for Runtime {
 	type Public = <Signature as sp_runtime::traits::Verify>::Signer;
@@ -1090,6 +1087,67 @@ impl pallet_fruniques::Config for Runtime {
 }
 
 parameter_types! {
+  pub const MaxDocuments:u32 = 100;
+  pub const MaxProjectsPerUser:u32 = 10_000;
+  pub const MaxUserPerProject:u32 = 100_000; // should be the sum of the max number of builders, investors, issuers, regional centers
+  pub const MaxBuildersPerProject:u32 = 25_00;
+  pub const MaxInvestorsPerProject:u32 = 25_000;
+  pub const MaxIssuersPerProject:u32 = 25_000;
+  pub const MaxRegionalCenterPerProject:u32 = 25_000;
+  pub const MaxProjectsPerInvestor:u32 = 1;
+  pub const MaxDrawdownsPerProject:u32 = 10_000;
+  pub const MaxTransactionsPerDrawdown:u32 = 1_000;
+  pub const MaxRegistrationsAtTime:u32 = 100;
+  pub const MaxExpendituresPerProject:u32 = 100_000;
+  pub const MaxBanksPerProject:u32 = 10_000;
+  // For benchmark
+  // pub const MaxBanksPerProject: u32 = 200;
+  pub const MaxJobEligiblesByProject:u32 = 100_000;
+  pub const MaxRevenuesByProject:u32 = 100_000;
+  pub const MaxTransactionsPerRevenue:u32 = 1_000;
+  pub const MaxStatusChangesPerDrawdown:u32 = 1_000;
+  pub const MaxStatusChangesPerRevenue:u32 = 1_000;
+  pub const MinAdminBalance: Balance = UNIT;
+  pub const TransferAmount: Balance = UNIT;
+  pub const MaxRecoveryChanges:u32 = 1_000;
+}
+
+impl pallet_fund_admin::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Timestamp = Timestamp;
+	type Moment = Moment;
+	type Rbac = RBAC;
+	type RemoveOrigin = EitherOfDiverse<
+		EnsureRoot<AccountId>,
+		pallet_collective::EnsureProportionAtLeast<AccountId, CouncilCollective, 3, 5>,
+	>;
+	type Currency = Balances;
+
+	type MaxDocuments = MaxDocuments;
+	type MaxProjectsPerUser = MaxProjectsPerUser;
+	type MaxUserPerProject = MaxUserPerProject;
+	type MaxBuildersPerProject = MaxBuildersPerProject;
+	type MaxInvestorsPerProject = MaxInvestorsPerProject;
+	type MaxIssuersPerProject = MaxIssuersPerProject;
+	type MaxRegionalCenterPerProject = MaxRegionalCenterPerProject;
+	type MaxDrawdownsPerProject = MaxDrawdownsPerProject;
+	type MaxTransactionsPerDrawdown = MaxTransactionsPerDrawdown;
+	type MaxRegistrationsAtTime = MaxRegistrationsAtTime;
+	type MaxExpendituresPerProject = MaxExpendituresPerProject;
+	type MaxProjectsPerInvestor = MaxProjectsPerInvestor;
+	type MaxBanksPerProject = MaxBanksPerProject;
+	type MaxJobEligiblesByProject = MaxJobEligiblesByProject;
+	type MaxRevenuesByProject = MaxRevenuesByProject;
+	type MaxTransactionsPerRevenue = MaxTransactionsPerRevenue;
+	type MaxStatusChangesPerDrawdown = MaxStatusChangesPerDrawdown;
+	type MaxStatusChangesPerRevenue = MaxStatusChangesPerRevenue;
+	type MaxRecoveryChanges = MaxRecoveryChanges;
+	type MinAdminBalance = MinAdminBalance;
+	type TransferAmount = TransferAmount;
+	type WeightInfo = pallet_fund_admin::weights::SubstrateWeight<Runtime>;
+}
+
+parameter_types! {
   pub const LabelMaxLen: u32 = 32;
   pub const MaxAuthsPerMarket: u32 = 30;
   pub const MaxRolesPerAuth : u32 = 1;
@@ -1182,8 +1240,6 @@ impl pallet_uniques::Config for Runtime {
 	type Helper = ();
 }
 
-
-
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime
@@ -1244,6 +1300,7 @@ construct_runtime!(
 		FundAdminRecords: pallet_fund_admin_records::{Pallet, Call, Storage, Event<T>}  = 157,
 		Afloat: pallet_afloat::{Pallet, Call, Storage, Event<T>}  = 158,
 		MappedAssets: pallet_mapped_assets::{Pallet, Call, Storage, Config<T>, Event<T>}  = 159,
+		FundAdmin: pallet_fund_admin::{Pallet, Call, Storage, Event<T>}  = 160,
 	}
 );
 
@@ -1261,6 +1318,7 @@ mod benches {
 		[pallet_bitcoin_vaults, BitcoinVaults]
 		[pallet_rbac, RBAC]
 		[pallet_afloat, Afloat]
+		[pallet_fund_admin, FundAdmin]
 	);
 }
 
