@@ -2,12 +2,20 @@
 
 echo "*** Initializing becnhmarking"
 
-cargo build --package hashed-runtime --release --features runtime-benchmarks
+PALLET="fruniques"
+BASE_PATH="/home/armando/Desktop/hashed-pallets"
 
-./target/release/hashed benchmark pallet \
+OUTPUT_PATH="$BASE_PATH/pallets/$PALLET/src/weights.rs"
+TEMPLATE_PATH="$BASE_PATH/.maintain/frame-weight-template.hbs"
+
+cargo build --package hashed-parachain --release --features runtime-benchmarks
+
+./target/release/hashed-parachain benchmark pallet \
 --chain dev \
---pallet pallet_template \
+--pallet "pallet_$PALLET" \
+--wasm-execution=compiled \
 --extrinsic '*' \
---steps 20 \
---repeat 10 \
---output pallets/template/src/weights.rs
+--steps 50 \
+--repeat 20 \
+--output "$OUTPUT_PATH" \
+--template "$TEMPLATE_PATH" \
