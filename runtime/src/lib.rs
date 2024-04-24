@@ -1084,6 +1084,7 @@ impl pallet_fruniques::Config for Runtime {
 	type MaxParentsInCollection = MaxParentsInCollection;
 	// type PalletId = FruniquesPalletId;
 	type MaxAttributes = MaxAttributes;
+	type WeightInfo = pallet_fruniques::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1319,6 +1320,7 @@ mod benches {
 		[pallet_rbac, RBAC]
 		[pallet_afloat, Afloat]
 		[pallet_fund_admin, FundAdmin]
+		[pallet_fruniques, Fruniques]
 	);
 }
 

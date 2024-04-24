@@ -241,6 +241,7 @@ runtime-benchmarks = [
 	"pallet-rbac/runtime-benchmarks",
 	"pallet-afloat/runtime-benchmarks",
 	"pallet-fund-admin/runtime-benchmarks",
+	"pallet-fruniques/runtime-benchmarks",
 	#Prebuilt pallets
 	"pallet-alliance/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",
