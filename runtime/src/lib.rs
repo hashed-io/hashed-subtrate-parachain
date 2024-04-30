@@ -1180,6 +1180,7 @@ impl pallet_gated_marketplace::Config for Runtime {
 	type Moment = u64;
 	//type LocalCurrency = Balances;
 	type Rbac = RBAC;
+	type WeightInfo = pallet_gated_marketplace::weights::SubstrateWeight<Runtime>;
 }
 
 impl pallet_afloat::Config for Runtime {
@@ -1321,6 +1322,7 @@ mod benches {
 		[pallet_afloat, Afloat]
 		[pallet_fund_admin, FundAdmin]
 		[pallet_fruniques, Fruniques]
+		[pallet_gated_marketplace, GatedMarketplace]
 	);
 }
 
