@@ -1202,6 +1202,7 @@ impl pallet_fund_admin_records::Config for Runtime {
 	type Timestamp = Timestamp;
 	type Moment = u64;
 	type MaxRecordsAtTime = MaxRecordsAtTime;
+	type WeightInfo = pallet_fund_admin_records::weights::SubstrateWeight<Runtime>;
 }
 
 parameter_types! {
@@ -1323,6 +1324,7 @@ mod benches {
 		[pallet_fund_admin, FundAdmin]
 		[pallet_fruniques, Fruniques]
 		[pallet_gated_marketplace, GatedMarketplace]
+		[pallet_fund_admin_records, FundAdminRecords]
 	);
 }
 

@@ -243,6 +243,7 @@ runtime-benchmarks = [
 	"pallet-fund-admin/runtime-benchmarks",
 	"pallet-fruniques/runtime-benchmarks",
 	"pallet-gated-marketplace/runtime-benchmarks",
+	"pallet-fund-admin-records/runtime-benchmarks",
 	#Prebuilt pallets
 	"pallet-alliance/runtime-benchmarks",
 	"pallet-assets/runtime-benchmarks",

@@ -2,7 +2,7 @@
 
 echo "*** Initializing becnhmarking"
 
-PALLET="fruniques"
+PALLET="fund-admin-records"
 BASE_PATH="/home/armando/Desktop/hashed-pallets"
 
 OUTPUT_PATH="$BASE_PATH/pallets/$PALLET/src/weights.rs"
@@ -12,7 +12,7 @@ cargo build --package hashed-parachain --release --features runtime-benchmarks
 
 ./target/release/hashed-parachain benchmark pallet \
 --chain dev \
---pallet "pallet_$PALLET" \
+--pallet "pallet_fund_admin_records" \
 --wasm-execution=compiled \
 --extrinsic '*' \
 --steps 50 \
