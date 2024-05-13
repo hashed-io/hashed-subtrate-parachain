@@ -1,6 +1,6 @@
 # HOW TO RUN: zombienet-linux-x64 spawn --provider native small_network.toml
 [relaychain]
-# default_image = "parity/polkadot:latest"
+# default_image = "docker.io/parity/polkadot:v1.3.0"
 # default_command = "polkadot"
 chain = "rococo-local"
 
@@ -11,12 +11,12 @@ chain = "rococo-local"
 # max_candidate_depth = 3
 # allowed_ancestry_len = 2
 
-# [relaychain.genesis.runtimeGenesis.patch.configuration.config]
-# scheduling_lookahead = 2
+[relaychain.genesis.runtimeGenesis.patch.configuration.config.scheduler_params]
+scheduling_lookahead = 2
 
-# [relaychain.genesis.runtimeGenesis.patch.configuration.config.async_backing_params]
-# max_candidate_depth = 3
-# allowed_ancestry_len = 2
+[relaychain.genesis.runtimeGenesis.patch.configuration.config.async_backing_params]
+max_candidate_depth = 3
+allowed_ancestry_len = 2
 
   [[relaychain.nodes]]
   name = "alice"

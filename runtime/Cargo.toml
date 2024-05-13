@@ -67,6 +67,7 @@ pallet-treasury = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v
 pallet-uniques = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
 pallet-vesting = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
 pallet-whitelist = { git = "https://github.com/paritytech/polkadot-sdk", tag = "v1.3.0-rc1", default-features = false }
+pallet-asset-registry = { path = "../pallets/asset-registry", default-features = false }
 
 # Substrate
 frame-benchmarking = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, optional = true, tag = "v1.3.0-rc1" }
@@ -104,19 +105,22 @@ polkadot-runtime-common = { git = "https://github.com/paritytech/polkadot-sdk", 
 xcm = { package = "staging-xcm", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 xcm-builder = { package = "staging-xcm-builder", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 xcm-executor = { package = "staging-xcm-executor", git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
-
+xcm-primitives = { path = "../primitives/xcm", default-features = false }
 # Cumulus
+assets-common = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-pallet-aura-ext = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-pallet-dmp-queue = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-pallet-parachain-system =  { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1", features = ["parameterized-consensus-hook",] }
 cumulus-pallet-session-benchmarking = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-pallet-xcm = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-pallet-xcmp-queue = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+cumulus-primitives-aura = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-primitives-core = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-primitives-timestamp =  { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 cumulus-primitives-utility =  { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 pallet-collator-selection =  { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 parachain-info = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
+parachains-common = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "v1.3.0-rc1" }
 
 [features]
 default = [
@@ -124,6 +128,7 @@ default = [
 	"hex-literal"
 ]
 std = [
+	"assets-common/std",
 	"codec/std",
 	"cumulus-pallet-aura-ext/std",
 	"cumulus-pallet-dmp-queue/std",
@@ -131,6 +136,7 @@ std = [
 	"cumulus-pallet-session-benchmarking/std",
 	"cumulus-pallet-xcm/std",
 	"cumulus-pallet-xcmp-queue/std",
+	"cumulus-primitives-aura/std",
 	"cumulus-primitives-core/std",
 	"cumulus-primitives-timestamp/std",
 	"cumulus-primitives-utility/std",
@@ -194,6 +200,7 @@ std = [
 	"pallet-timestamp/std",
 	"pallet-xcm/std",
 	"parachain-info/std",
+	"parachains-common/std",
 	"polkadot-parachain-primitives/std",
 	"polkadot-runtime-common/std",
 	"scale-info/std",
@@ -230,6 +237,7 @@ runtime-benchmarks = [
 	"pallet-timestamp/runtime-benchmarks",
 	"pallet-sudo/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
+	"pallet-asset-registry/runtime-benchmarks",
 	"polkadot-parachain-primitives/runtime-benchmarks",
 	"polkadot-runtime-common/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",
@@ -339,4 +347,5 @@ try-runtime = [
 	"pallet-uniques/try-runtime",
 	"pallet-vesting/try-runtime",
 	"pallet-whitelist/try-runtime",
+	"pallet-asset-registry/try-runtime",
 ]

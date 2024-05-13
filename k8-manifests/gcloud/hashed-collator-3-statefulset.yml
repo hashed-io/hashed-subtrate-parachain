@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: md5-collator-2
+  name: hashed-collator-3
   namespace: hashed-network
 spec:
   replicas: 1
-  serviceName: md5-collator-2-headless
+  serviceName: hashed-collator-3-headless
   selector:
     matchLabels:
-      app: md5-collator-2
+      app: hashed-collator-3
   template:
     metadata:
       namespace: hashed-network
       labels:
-        app: md5-collator-2
+        app: hashed-collator-3
     spec:
       containers:
-      - name: md5-collator-2
+      - name: hashed-collator-3
         imagePullPolicy: IfNotPresent
-        image: sebastianmontero/hashed-substrate-collator-md5:5ced0a249cff4c2c3d228979c6af4b2a7547edf0
+        image: sebastianmontero/hashed-substrate-collator-hashed:e3cbb15367469502193220e4070d063a3d45b4c4
         command: ["/var/www/hashed-substrate/scripts/start_collator.sh"]
-        args: ["md5", "/var/www/hashed/hashed"]
+        args: ["hashed", "/var/www/hashed/hashed"]
         volumeMounts:
-          - name: md5-collator-2-pvc
+          - name: hashed-collator-3-pvc
             mountPath:  /var/www/hashed/hashed
         env:
           - name: BOOTNODES
-            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWR6PbHDxdAK7pX9bPosWT3heVmqH1YZt4kppUKVztQcQX"
+            value: "/dns/hashed-collator-2.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWBdoiZsvYnYnWEdefordNhwSaueiiFmuKnZewomkps4sz"
           - name: LISTEN_ADDR
             value: "/ip4/0.0.0.0/tcp/40333/ws"
           - name: PUBLIC_ADDR
-            value: "/dns/c2md5.p2p.hashed.live/tcp/443/wss"
+            value: "/dns/c3.p2p.hashed.network/tcp/443/wss"
           - name: RELAY_PRUNING
             value: "1000"
           - name: RPC_MAX_CONNECTIONS
@@ -38,21 +38,19 @@ spec:
           - name: RPC_METHODS
             value: "unsafe"
           # - name: RUST_LOG
-          #   value: "parachain=debug"
-          # - name: RUST_LOG
           #   value: "sub-libp2p=trace"
           # - name: RUST_LOG
           #   value: "db=trace,sync=trace,sub-libp2p=trace"
           # - name: NODEKEY
           #   valueFrom:
           #     secretKeyRef:
-          #       name: md5-collator-2-secrets
+          #       name: hashed-collator-3-secrets
           #       key: NODEKEY
           #       optional: false
         resources:
           limits:
-            memory: "4G"
-            cpu: "100"
+            memory: "10G"
+            cpu: "3"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -62,27 +60,32 @@ spec:
         - containerPort: 30333
         - containerPort: 40333
       nodeSelector:
-        node.kubernetes.io/instance-type: c6id.2xlarge
+        cloud.google.com/gke-nodepool: hashed-systems-node-pool-hp
+      tolerations:
+      - key: special
+        operator: Equal
+        value: hp
+        effect: NoSchedule
   volumeClaimTemplates:
   - metadata:
-      name: md5-collator-2-pvc
+      name: hashed-collator-3-pvc
       namespace: hashed-network
     spec:
       accessModes:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 400Gi
-      storageClassName: gp2
+          storage: 600Gi
+      storageClassName: premium-rwo
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name:  md5-collator-2
+  name:  hashed-collator-3
   namespace: hashed-network
 spec:
   selector:
-    app:  md5-collator-2
+    app:  hashed-collator-3
   type:  ClusterIP
   ports:
   - name:  collator-p2p-port
@@ -100,3 +103,28 @@ spec:
   - name:  rpc-port
     port:  9933
     targetPort:  9933
+---
+# Uncomment if a persistent volume needs to be created manually
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: md5-persistent-volume
+#   namespace: hashed-network
+# spec:
+#   capacity:
+#     storage: 20Gi
+#   volumeMode: Filesystem
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Retain
+#   storageClassName: local-storage
+#   local:
+#     path: /var/www/hashed/
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#         - matchExpressions:
+#             - key: minikube.k8s.io/hostname
+#               operator: In
+#               values:
+#               - minikube

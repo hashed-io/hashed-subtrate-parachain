@@ -1,8 +1,22 @@
 # HOW TO RUN: zombienet-linux-x64 spawn --provider native small_network.toml
 [relaychain]
-default_image = "parity/polkadot:latest"
-default_command = "polkadot"
+# default_image = "parity/polkadot:latest"
+# default_command = "polkadot"
 chain = "rococo-local"
+
+# [relaychain.genesis.runtime.configuration.config]
+# scheduling_lookahead = 2
+
+# [relaychain.genesis.runtime.configuration.config.async_backing_params]
+# max_candidate_depth = 3
+# allowed_ancestry_len = 2
+
+[relaychain.genesis.runtimeGenesis.patch.configuration.config]
+scheduling_lookahead = 2
+
+[relaychain.genesis.runtimeGenesis.patch.configuration.config.async_backing_params]
+max_candidate_depth = 3
+allowed_ancestry_len = 2
 
   [[relaychain.nodes]]
   name = "alice"
@@ -24,7 +38,7 @@ chain = "md5"
   name = "charlie"
   validator = true
 #   image = "sebastianmontero/hashed-substrate-collator:latest"
-  command = "../target/release/hashed-parachain"
+  command = "./target/release/hashed-parachain"
   args = ["-lparachain=debug"]
 #   args = ["--force-authoring"]
 #   args = ["--chain", "/var/www/hashed-substrate/md5-collator-raw-spec.json", "--force-authoring"]

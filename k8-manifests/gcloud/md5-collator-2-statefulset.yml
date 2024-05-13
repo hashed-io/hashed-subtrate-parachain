@@ -26,11 +26,11 @@ spec:
             mountPath:  /var/www/hashed/hashed
         env:
           - name: BOOTNODES
-            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWR6PbHDxdAK7pX9bPosWT3heVmqH1YZt4kppUKVztQcQX"
+            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWDrgSpA8CQqCEdC9Yr1Q9p9WbUkb6m2VuuGtNHRtpZAo5"
           - name: LISTEN_ADDR
             value: "/ip4/0.0.0.0/tcp/40333/ws"
           - name: PUBLIC_ADDR
-            value: "/dns/c2md5.p2p.hashed.live/tcp/443/wss"
+            value: "/dns/c2md5.p2p.hashed.network/tcp/443/wss"
           - name: RELAY_PRUNING
             value: "1000"
           - name: RPC_MAX_CONNECTIONS
@@ -51,8 +51,8 @@ spec:
           #       optional: false
         resources:
           limits:
-            memory: "4G"
-            cpu: "100"
+            memory: "8G"
+            cpu: "2"
           # requests:
           #   ephemeral-storage: 25Gi
         ports:
@@ -61,8 +61,13 @@ spec:
         - containerPort: 9946
         - containerPort: 30333
         - containerPort: 40333
-      nodeSelector:
-        node.kubernetes.io/instance-type: c6id.2xlarge
+      # nodeSelector:
+      #   cloud.google.com/gke-nodepool: hashed-systems-node-pool-hp
+      # tolerations:
+      # - key: special
+      #   operator: Equal
+      #   value: hp
+      #   effect: NoSchedule
   volumeClaimTemplates:
   - metadata:
       name: md5-collator-2-pvc
@@ -73,7 +78,7 @@ spec:
       resources:
         requests:
           storage: 400Gi
-      storageClassName: gp2
+      storageClassName: standard
 ---
 apiVersion: v1
 kind: Service

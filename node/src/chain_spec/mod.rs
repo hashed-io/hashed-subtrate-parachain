@@ -87,7 +87,7 @@ pub fn development_config() -> ChainSpec {
 	let mut properties = sc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "HDEV".into());
 	properties.insert("tokenDecimals".into(), 18.into());
-	properties.insert("ss58Format".into(), 42.into());
+	properties.insert("ss58Format".into(), 5000.into());
 
 	ChainSpec::from_genesis(
 		// Name
@@ -143,7 +143,7 @@ pub fn local_testnet_config() -> ChainSpec {
 	let mut properties = sc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "HDEV".into());
 	properties.insert("tokenDecimals".into(), 18.into());
-	properties.insert("ss58Format".into(), 42.into());
+	properties.insert("ss58Format".into(), 5000.into());
 
 	ChainSpec::from_genesis(
 		// Name
@@ -214,7 +214,7 @@ fn testnet_genesis(
 				..Default::default()
 		},
 		balances: hashed_parachain_runtime::BalancesConfig {
-			balances: endowed_accounts.iter().cloned().map(|k| (k, 1 << 60)).collect(),
+			balances: endowed_accounts.iter().cloned().map(|k| (k, 1000000000000000000000000000)).collect(),
 		},
 		transaction_payment: Default::default(),
 		sudo: SudoConfig { key: Some(root_key) },
