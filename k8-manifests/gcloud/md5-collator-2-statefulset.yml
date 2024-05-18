@@ -26,7 +26,7 @@ spec:
             mountPath:  /var/www/hashed/hashed
         env:
           - name: BOOTNODES
-            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWDrgSpA8CQqCEdC9Yr1Q9p9WbUkb6m2VuuGtNHRtpZAo5"
+            value: "/dns/md5-collator-archive-1.hashed-network.svc.cluster.local/tcp/40333/ws/p2p/12D3KooWG7mkt68GY6wQrGfHy6mXT3QmMjFwwh6uqWnKgB4YDJff"
           - name: LISTEN_ADDR
             value: "/ip4/0.0.0.0/tcp/40333/ws"
           - name: PUBLIC_ADDR
